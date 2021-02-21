@@ -1,0 +1,151 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>&lt;mb-form-string&gt; Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script type="module" src="../build/mb-form-string.js"></script>
+    <script type="module" src="../build/mb-form-integer.js"></script>
+    <script type="module" src="../build/mb-form-number.js"></script>
+    <script type="module" src="../build/mb-form-date.js"></script>
+    <script type="module" src="../build/mb-form-time.js"></script>
+    <script type="module" src="../build/mb-form-datetime.js"></script>
+    <script type="module" src="../build/mb-form-boolean.js"></script>
+    <script type="module" src="../build/mb-form-enum.js"></script>
+    <script type="module" src="../build/mb-form-object.js"></script>
+    <script type="module" src="../build/mb-form-array.js"></script>
+    <script type="module" src="../build/mb-form.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8"> <mb-form style="width: 100%;" id="form"></mb-form> </div>
+            <div class="col-sm-4"> <div id="log"></div> </div>
+        </div>
+    </div>
+</body>
+<script>
+    const schema = {
+        "type": "object",
+        "description": "Compte rendu",
+        "properties": {
+            "notmandatory": {
+                "type": "string",
+                "description": "any string",
+            },
+            "string": {
+                "type": "string",
+                "description": "input string",
+                "minLength": 5,
+                "maxLength": 10,
+                "pattern": "^[a-zA-Z ]*$"
+            },
+            "password": {
+                "type": "string",
+                "description": "password string",
+                "options" : {
+                    "password" : true
+                }
+            },
+            "boolean": {
+                "type": "boolean",
+                "description": "input boolean",
+            },
+            "integer": {
+                "type": "integer",
+                "description": "input integer",
+                "minimum": -10,
+                "maximum": 10,
+                "maximumExclusive": true
+            },
+            "number": {
+                "type": "number",
+                "description": "input number",
+                "minimum": 0.5,
+                "maximum": 3.5,
+                "maximumExclusive": true
+            },
+            "date": {
+                "type": "string",
+                "format": "date",
+                "description": "input date",
+            },
+            "time": {
+                "type": "string",
+                "format": "time",
+                "description": "input time",
+            },
+            "datetime": {
+                "type": "string",
+                "format": "date-time",
+                "description": "input datetime",
+            },
+            "enum": {
+                "type": "string",
+                "description": "input enum",
+                "enum": ["a","b","c","d","e"]
+            },
+            "enum2": {
+                "type": "integer",
+                "description": "input enum 2",
+                "oneOf" : [
+                    { "const" : 1, "description" : "Priorité Haute"},
+                    { "const" : 2, "description" : "Priorité Moyenne"},
+                    { "const" : 3, "description" : "Priorité Basse"},
+                ]
+            },
+            "arrayint": {
+                "type": "array",
+                "description": "array of integers",
+                "items" : { "type" : "integer", "default" : 5},
+                "minItems": 3,
+                "maxItems": 5
+            },
+            "error": {
+                "type": "zztype",
+                "description": "input error",
+            }
+        },
+        required: [ "string",
+            "password",
+            "integer",
+            "number",
+            "time",
+            "datetime",
+            "enum",
+            "enum2",
+            "error"
+        ]
+    }
+ 
+    const data = {
+        "notmandatory": 'a string',
+        "string": 'a',
+        "boolean": true,
+        "password": 'dontsayit',
+        "integer": 5,
+        "number": 2.71828,
+        "date": new Date(),
+        "time": '13:15',
+        "datetime": new Date(),
+        "enum": null,
+        "enum2": null,
+        "arrayint": [10, 20, 30],
+        "error" : 12
+    }
+    window.addEventListener('load', () => {
+        const field = document.getElementById('form')
+        field.schema = schema
+        field.data = data
+        const log = document.getElementById('log')
+        setInterval(() => {
+            log.innerHTML = `<pre>${JSON.stringify(data, undefined, 4).replace(/\n/g, '<br>')}</pre>`
+        }, 500)
+    })
+</script>
+
+</html>

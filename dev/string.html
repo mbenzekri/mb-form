@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>&lt;mb-form-string&gt; Demo</title>
+    <script type="module" src="../build/mb-form-string.js"></script>
+</head>
+
+<body>
+    <div style="padding:5px">
+        <mb-form-string id="stringfield" name="string" required></mb-form-string><br>
+    </div>
+    <hr>
+    <div id="log"></div>
+</body>
+<script>
+    const schemas = {
+        "stringfield": {
+            "type": "string",
+            "description": "input string",
+            "minLength": 5,
+            "maxLength": 10,
+            "pattern": "^[a-zA-Z ]*$"
+        }
+    }
+    const data = {
+        "string": 'a string',
+    }
+    window.addEventListener('load', () => {
+        const fieldnames = ['stringfield']
+        fieldnames.forEach(fieldname => {
+            const field = document.getElementById(fieldname)
+            field.schema = schemas[fieldname]
+            field.data = data
+        })
+        const log = document.getElementById('log')
+        setInterval(() => {
+            log.innerHTML =
+                fieldnames.map(fieldname => {
+                    const field = document.getElementById(fieldname)
+                    return `data.${fieldname} = ${JSON.stringify(field.value)} valid=${field.valid} msg=${field.message } <br>`
+                }).join('') +
+                `<pre>${JSON.stringify(data, undefined, 4).replace(/\n/g, '<br>')}</pre>`
+        }, 200)
+    })
+</script>
+
+</html>
