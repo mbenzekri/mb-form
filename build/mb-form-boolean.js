@@ -37,8 +37,8 @@ let MBFormBoolean = class MBFormBoolean extends MBFormField {
             </div>
         `;
     }
-    get value() { return super.value; }
-    set value(_val) {
+    getValue() { return this.data[Array.isArray(this.data) ? this.index : this.name]; }
+    setValue(_val) {
         this.data[Array.isArray(this.data) ? this.index : this.name] = this.input.checked;
     }
 };

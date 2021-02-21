@@ -33,13 +33,13 @@ export class MBFormEnum extends MBFormField {
             </div>
         `;
     }
-    get value(): any { return super.value }
-    set value(val: any) {
+    getValue(): any { return this.data[Array.isArray(this.data) ? this.index : this.name] }
+    setValue(val: any) {
         switch(this.schema.type) {
             case 'integer' : val = parseInt(val,10); break
             case 'number' : val = parseFloat(val); break
             case 'boolean' : val =!!val; break
-        }   
+        }
         this.data[Array.isArray(this.data) ? this.index : this.name] = val
     }
     get enum(): { label: string; value: any }[] {

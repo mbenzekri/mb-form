@@ -34,8 +34,8 @@ export class MBFormTime extends MBFormField {
             </div>
         `;
     }
-    get value(): any { return super.value }
-    set value(val: any) {
+    getValue(): any { return this.data[Array.isArray(this.data) ? this.index : this.name] }
+    setValue(val: any) {
         let convert
         switch(true) {
             case typeof val === 'string' : 

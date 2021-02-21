@@ -16,7 +16,7 @@ export declare class MBFormArray extends MBFormField {
     add(): void;
     get nomore(): boolean;
     toggle(): void;
-    get value(): any;
-    set value(val: any);
+    getValue(): any;
+    setValue(val: any): void;
 }
 //# sourceMappingURL=mb-form-array.d.ts.map

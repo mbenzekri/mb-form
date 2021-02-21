@@ -49,8 +49,8 @@ export class MBFormObject extends MBFormField {
         for (const field of nodelist) if (!(field as MBFormField).valid) return false
         return true
     }
-    get value(): any { return super.value }
-    set value(val: any) {
+    getValue(): any { return this.data[Array.isArray(this.data) ? this.index : this.name] }
+    setValue(val: any) {
         let convert
         switch(true) {
             case typeof val === 'object': 

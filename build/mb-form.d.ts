@@ -22,7 +22,7 @@ export declare class MBForm extends LitElement {
     render(): import("lit-element").TemplateResult;
     confirm(): void;
     cancel(): void;
-    solveref(schema: Pojo): void;
+    compile(): void;
     definition(ref: string): any;
 }
 //# sourceMappingURL=mb-form.d.ts.map

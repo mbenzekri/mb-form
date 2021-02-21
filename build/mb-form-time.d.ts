@@ -8,7 +8,7 @@ import { MBFormField } from "./mb-form-field";
 export declare class MBFormTime extends MBFormField {
     constructor();
     renderField(): import("lit-element").TemplateResult;
-    get value(): any;
-    set value(val: any);
+    getValue(): any;
+    setValue(val: any): void;
 }
 //# sourceMappingURL=mb-form-time.d.ts.map

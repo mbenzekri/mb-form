@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { customElement, html } from "lit-element";
-// import {classMap} from 'lit-html/directives/class-map.js';
 import {ifDefined} from 'lit-html/directives/if-defined';
 
 import { MBFormField } from "./mb-form-field";
@@ -41,4 +40,13 @@ export class MBFormString extends MBFormField {
     get maxlength() { return this.schema.maxLength }
     get pattern() { return this.schema.pattern }
     get password() {return !!this.schema.options?.password }
+    
+    getValue(): any {
+        return this.data[Array.isArray(this.data) ? this.index : this.name]
+    }
+
+    setValue(val: any) {
+        this.data[Array.isArray(this.data) ? this.index : this.name] = val.toString()
+    }
+
 }

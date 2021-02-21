@@ -6,7 +6,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { customElement, html } from "lit-element";
-// import {classMap} from 'lit-html/directives/class-map.js';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { MBFormField } from "./mb-form-field";
 /**
@@ -44,6 +43,12 @@ let MBFormString = class MBFormString extends MBFormField {
     get maxlength() { return this.schema.maxLength; }
     get pattern() { return this.schema.pattern; }
     get password() { var _a; return !!((_a = this.schema.options) === null || _a === void 0 ? void 0 : _a.password); }
+    getValue() {
+        return this.data[Array.isArray(this.data) ? this.index : this.name];
+    }
+    setValue(val) {
+        this.data[Array.isArray(this.data) ? this.index : this.name] = val.toString();
+    }
 };
 MBFormString = __decorate([
     customElement("mb-form-string")

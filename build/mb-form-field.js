@@ -6,16 +6,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { html, css, LitElement, property } from "lit-element";
-function isbasic(name) {
+export function isbasic(name) {
     if (typeof name !== 'string')
         return false;
     return ['string', 'integer', 'number', 'boolean'].includes(name);
+}
+const valdesc = {
+    'badInput': { message: 'valeur incorrecte', attribute: '' },
+    'valueMissing': { message: 'obligatoire', attribute: '' },
+    'patternMismatch': { message: 'format non respecté (patron=?)', attribute: 'pattern' },
+    'tooLong': { message: 'trop long (max=?)', attribute: 'maxlength' },
+    'tooShort': { message: 'trop court (min=?)', attribute: 'minlength' },
+    'rangeOverflow': { message: 'trop grand (max= ?)', attribute: 'max' },
+    'rangeUnderflow': { message: 'trop petit (min=?)', attribute: 'min' },
+    'stepMismatch': { message: 'erreur de pas (pas=?)', attribute: 'step' },
+    'customError': { message: 'erreur spécialisé', attribute: '' },
+    'typeMismatch': { message: 'syntaxe incorrecte', attribute: '' },
+};
+function message(field) {
+    var _a;
+    const input = field.input;
+    if (field.valid || !input)
+        return '';
+    const errorkey = Object.keys(valdesc).find(key => input.validity[key]);
+    if (!errorkey)
+        return '';
+    return valdesc[errorkey].attribute ? valdesc[errorkey].message.replace(/\?/, (_a = input.getAttribute(valdesc[errorkey].attribute)) !== null && _a !== void 0 ? _a : '') : valdesc[errorkey].message;
 }
 /**
  * @prop schema
  * @prop data
  * @prop name
  * @prop index
+ * @prop required
  */
 export class MBFormField extends LitElement {
     constructor(schema, data) {
@@ -23,31 +46,24 @@ export class MBFormField extends LitElement {
         this.index = 0;
         this.required = false;
         this.valid = false;
+        this.message = '';
         this.name = '_dummy_';
         this.data = { _dummy_: data };
         this.schema = schema;
     }
-    render() {
-        return html `
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-            ${this.renderField()}
-            ${this.valid ? html `` : html `<div><p>${this.message}</p></div>`}
-        `;
-    }
     static get styles() {
         return [css `
-            input:invalid {
+            .invalid {
                 border-color: rgba(220,53,69);
             }
-            input:invalid:focus {
+            .invalid:focus, input:out-of-range:focus {
                 box-shadow:0 0 0 .25rem rgba(220,53,69,.25);
                 border-color: red;
             }
-            input:valid {
+            .valid {
                 border-color: rgba(25,135,84);
             }
-            input:valid:focus {
+            .valid:focus {
                 box-shadow:0 0 0 .25rem rgba(25,135,84,.25);
                 border-color: green;
             }
@@ -60,6 +76,49 @@ export class MBFormField extends LitElement {
             }
         `];
     }
+    render() {
+        return html `
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+            ${this.renderField()}
+            ${this.valid ? html `` : html `<div><p>${this.message}</p></div>`}
+        `;
+    }
+    renderItem(nameorindex) {
+        let name, index, schema, required;
+        if (typeof nameorindex === 'string') {
+            name = nameorindex;
+            index = undefined;
+            schema = this.schema.properties[nameorindex];
+            required = this.isRequired(name);
+        }
+        else {
+            name = undefined;
+            index = nameorindex;
+            schema = this.schema.items;
+            required = false;
+        }
+        switch (schema.field) {
+            case 'mb-form-enum': return html `<mb-form-enum .schema="${schema}" .name="${name}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-enum><br>`;
+            case "mb-form-date": return html `<mb-form-date .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-date><br>`;
+            case "mb-form-time": return html `<mb-form-time .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-time><br>`;
+            case "mb-form-datetime": return html `<mb-form-datetime .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-datetime><br>`;
+            case "mb-form-string": return html `<mb-form-string .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-string><br>`;
+            case "mb-form-boolean": return html `<mb-form-boolean .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-boolean><br>`;
+            case "mb-form-number": return html `<mb-form-number .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-number><br>`;
+            case "mb-form-integer": return html `<mb-form-integer .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-integer><br>`;
+            case "mb-form-array": return html `<mb-form-array .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-array><br>`;
+            case "mb-form-object": return html ` <mb-form-object .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-object>`;
+            case 'mb-form-error':
+            default: return html `<div class="alert alert-warning" role="alert">field type ${schema.type}  not implemented in object/array field!</div>`;
+        }
+    }
+    arrayAppend(index) {
+        return html `
+            ${index !== undefined
+            ? html `<div class="input-group-append"> <span class="btn btn-secondary input-group-text" @click="${this.dropItem}" >x</span></div>`
+            : html ``}`;
+    }
     connectedCallback() {
         super.connectedCallback();
     }
@@ -68,17 +127,17 @@ export class MBFormField extends LitElement {
         (_a = this.input) === null || _a === void 0 ? void 0 : _a.addEventListener('keydown', (evt) => {
             if (/^F\d+$/.test(evt.key)) {
                 if (evt.key === 'F9') {
-                    console.log(`name=${this.name}\ndata=${JSON.stringify(this.data, null, 4)}\nvalue=${this.value}\n$schema=${JSON.stringify(this.schema, null, 4)}`);
+                    console.log(Object.keys(valdesc).map(key => `${key} = ${this.input.validity[key]}`).join('\n'));
+                    console.log(`name=${this.name}\nvalid=${this.valid}\ncheck=${JSON.stringify(this.input.validity)}\ndata=${JSON.stringify(this.data, null, 4)}\nvalue=${this.value}\n$schema=${JSON.stringify(this.schema, null, 4)}`);
                     evt.preventDefault();
                     evt.stopImmediatePropagation();
                 }
             }
         });
+        this.check();
     }
     update(changedProperties) {
-        var _a;
         super.update(changedProperties);
-        this.valid = (_a = this.input) === null || _a === void 0 ? void 0 : _a.checkValidity();
     }
     get label() {
         var _a;
@@ -94,28 +153,9 @@ export class MBFormField extends LitElement {
         var _a;
         return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.getElementById('input');
     }
-    get message() {
-        var _a;
-        return this.valid ? '' : (_a = this.input) === null || _a === void 0 ? void 0 : _a.validationMessage;
-    }
-    get validitymap() {
-        const map = { 'is-invalid': !this.valid, 'is-valid': this.valid };
-        console.log(map);
-        return map;
-    }
     isRequired(name, schema = this.schema) {
         var _a;
         return !!((_a = schema.required) === null || _a === void 0 ? void 0 : _a.includes(name));
-    }
-    isEnum(schema) {
-        switch (true) {
-            case typeof schema.type != 'string': return false;
-            case !isbasic(schema.type): return false;
-            case !!schema.enum: return true;
-            case schema.oneOf && schema.oneOf.every((sch) => isbasic(typeof sch.const)): return true;
-            case schema.anyOf && schema.anyOf.every((sch) => isbasic(typeof sch.const)): return true;
-        }
-        return false;
     }
     default(schema, required) {
         switch (true) {
@@ -137,63 +177,23 @@ export class MBFormField extends LitElement {
         this.value = ((_a = this.input) === null || _a === void 0 ? void 0 : _a.valueAsNumber) ? this.input.valueAsNumber : this.input.value;
         this.valid = (_b = this.input) === null || _b === void 0 ? void 0 : _b.checkValidity();
     }
-    renderItem(nameorindex) {
-        let name, index, schema, required;
-        if (typeof nameorindex === 'string') {
-            name = nameorindex;
-            index = undefined;
-            schema = this.schema.properties[nameorindex];
-            required = this.isRequired(name);
-        }
-        else {
-            name = undefined;
-            index = nameorindex;
-            schema = this.schema.items;
-            required = false;
-        }
-        if (this.isEnum(schema)) {
-            return html `<mb-form-enum .schema="${schema}" .name="${name}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-enum><br>`;
-        }
-        switch (schema.type) {
-            case "string":
-                switch (schema.format) {
-                    case "date": return html `<mb-form-date .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-date><br>`;
-                    case "time": return html `<mb-form-time .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-time><br>`;
-                    case "date-time": return html `<mb-form-datetime .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-datetime><br>`;
-                    default: return html `<mb-form-string .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-string><br>`;
-                }
-            case "boolean": return html `<mb-form-boolean .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-boolean><br>`;
-            case "number": return html `<mb-form-number .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-number><br>`;
-            case "integer": return html `<mb-form-integer .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-integer><br>`;
-            case "array": return html `<mb-form-array .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-array><br>`;
-            case "object": return html ` <mb-form-object .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-object>`;
-            default: return html `<div class="alert alert-warning" role="alert">field type ${schema.type} not implemented in object field!</div>`;
-        }
-    }
     dropItem() {
         const event = new CustomEvent('remove-item', { detail: this.index, composed: true });
         this.dispatchEvent(event);
     }
-    arrayAppend(index) {
-        return html `
-            ${index !== undefined
-            ? html `<div class="input-group-append"> <span class="btn btn-secondary input-group-text" @click="${this.dropItem}" >x</span></div>`
-            : html ``}`;
-    }
     get value() {
-        switch (true) {
-            case this.data === undefined: return null;
-            case Array.isArray(this.data) && this.index >= 0 && this.index < this.data.length:
-                return this.data[this.index];
-            case Array.isArray(this.data):
-                return undefined;
-            case this.name in this.data:
-                return this.data[this.name];
-        }
-        return null;
+        return this.getValue();
     }
     set value(val) {
-        this.data[Array.isArray(this.data) ? this.index : this.name] = val;
+        this.check();
+        this.setValue(val);
+    }
+    check() {
+        var _a, _b, _c;
+        this.valid = (_a = this.input) === null || _a === void 0 ? void 0 : _a.checkValidity();
+        this.message = message(this);
+        (_b = this.input) === null || _b === void 0 ? void 0 : _b.classList.add(this.valid ? 'valid' : 'invalid');
+        (_c = this.input) === null || _c === void 0 ? void 0 : _c.classList.remove(this.valid ? 'invalid' : 'valid');
     }
 }
 __decorate([
@@ -214,4 +214,7 @@ __decorate([
 __decorate([
     property({ attribute: false })
 ], MBFormField.prototype, "valid", void 0);
+__decorate([
+    property({ attribute: false })
+], MBFormField.prototype, "message", void 0);
 //# sourceMappingURL=mb-form-field.js.map

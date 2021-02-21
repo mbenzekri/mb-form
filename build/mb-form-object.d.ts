@@ -13,7 +13,7 @@ export declare class MBFormObject extends MBFormField {
     renderField(): TemplateResult;
     toggle(): void;
     checkValidity(): boolean;
-    get value(): any;
-    set value(val: any);
+    getValue(): any;
+    setValue(val: any): void;
 }
 //# sourceMappingURL=mb-form-object.d.ts.map

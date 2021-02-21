@@ -9,7 +9,7 @@ export declare class MBFormDatetime extends MBFormField {
     constructor();
     convert(value: any): Date;
     renderField(): import("lit-element").TemplateResult;
-    get value(): any;
-    set value(val: any);
+    getValue(): any;
+    setValue(val: any): void;
 }
 //# sourceMappingURL=mb-form-datetime.d.ts.map

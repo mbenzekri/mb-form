@@ -33,8 +33,8 @@ export class MBFormBoolean extends MBFormField {
             </div>
         `;
     }
-    get value(): any { return super.value }
-    set value(_val: any) { 
+    getValue(): any { return this.data[Array.isArray(this.data) ? this.index : this.name] }
+    setValue(_val: any) { 
         this.data[Array.isArray(this.data) ? this.index : this.name] = this.input.checked
     }
 }

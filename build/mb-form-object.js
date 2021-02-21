@@ -54,8 +54,8 @@ let MBFormObject = class MBFormObject extends MBFormField {
                 return false;
         return true;
     }
-    get value() { return super.value; }
-    set value(val) {
+    getValue() { return this.data[Array.isArray(this.data) ? this.index : this.name]; }
+    setValue(val) {
         let convert;
         switch (true) {
             case typeof val === 'object':

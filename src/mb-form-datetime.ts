@@ -35,7 +35,7 @@ export class MBFormDatetime extends MBFormField {
             </div>
         `;
     }
-    get value(): any {
+    getValue(): any {
         if (this.data === undefined) return ''
         const val = Array.isArray(this.data) ? this.data[this.index] : this.data[this.name]
         switch(true) {
@@ -45,7 +45,7 @@ export class MBFormDatetime extends MBFormField {
         }
         return ''
     }
-    set value(val: any) {
+    setValue(val: any) {
         let convert
         switch(true) {
             case typeof val === 'string' && /\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ?/.test(val) : 

@@ -70,8 +70,8 @@ let MBFormNumber = class MBFormNumber extends MBFormField {
             return this.schema.minimum;
         return '';
     }
-    get value() { return super.value; }
-    set value(val) {
+    getValue() { return this.data[Array.isArray(this.data) ? this.index : this.name]; }
+    setValue(val) {
         let convert;
         switch (true) {
             case typeof val === 'string':

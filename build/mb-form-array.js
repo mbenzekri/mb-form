@@ -65,8 +65,8 @@ let MBFormArray = class MBFormArray extends MBFormField {
     toggle() {
         this.collapsed = !this.collapsed;
     }
-    get value() { return super.value; }
-    set value(val) {
+    getValue() { return this.data[Array.isArray(this.data) ? this.index : this.name]; }
+    setValue(val) {
         this.data[Array.isArray(this.data) ? this.index : this.name] = Array.isArray(val) ? val : undefined;
     }
 };

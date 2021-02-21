@@ -12,5 +12,7 @@ export declare class MBFormString extends MBFormField {
     get maxlength(): any;
     get pattern(): any;
     get password(): boolean;
+    getValue(): any;
+    setValue(val: any): void;
 }
 //# sourceMappingURL=mb-form-string.d.ts.map

@@ -12,7 +12,7 @@ export declare class MBFormInteger extends MBFormField {
     get max(): any;
     get min(): any;
     keypress(event: KeyboardEvent): void;
-    get value(): any;
-    set value(val: any);
+    getValue(): any;
+    setValue(val: any): void;
 }
 //# sourceMappingURL=mb-form-integer.d.ts.map

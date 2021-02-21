@@ -8,7 +8,7 @@ import { MBFormField } from "./mb-form-field";
 export declare class MBFormBoolean extends MBFormField {
     constructor();
     renderField(): import("lit-element").TemplateResult;
-    get value(): any;
-    set value(_val: any);
+    getValue(): any;
+    setValue(_val: any): void;
 }
 //# sourceMappingURL=mb-form-boolean.d.ts.map
