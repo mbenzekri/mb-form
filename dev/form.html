@@ -15,6 +15,7 @@
     <script type="module" src="../build/mb-form-datetime.js"></script>
     <script type="module" src="../build/mb-form-boolean.js"></script>
     <script type="module" src="../build/mb-form-enum.js"></script>
+    <script type="module" src="../build/mb-form-nstate.js"></script>
     <script type="module" src="../build/mb-form-object.js"></script>
     <script type="module" src="../build/mb-form-array.js"></script>
     <script type="module" src="../build/mb-form.js"></script>
@@ -42,6 +43,14 @@
                     "codepost" : {"type": "string", pattern:'[0-9]{5}'},
                 },
                 "required": ["numero","voie","codepost","commune"]
+            },
+            "fuzzy" : {
+                "type": "boolean",
+                "oneOf" : [
+                    {"const": true, "title": "oui"},
+                    {"const": false, "title": "non"},
+                    {"const": null, "title": "inconnu"},
+                ]
             }
         },
         "type": "object",
@@ -110,8 +119,10 @@
                     { "const" : 1, "title" : "Priorité Haute"},
                     { "const" : 2, "title" : "Priorité Moyenne"},
                     { "const" : 3, "title" : "Priorité Basse"},
+                    { "const" : 4, "title" : "Priorité nulle"},
                 ]
             },
+            "fuzzy": { "$ref" : "#/definitions/fuzzy" },
             "arrayint": {
                 "type": "array",
                 "title": "array of integers",

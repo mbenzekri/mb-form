@@ -100,6 +100,7 @@ export class MBFormField extends LitElement {
         }
         switch (schema.field) {
             case 'mb-form-enum': return html `<mb-form-enum .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-enum>`;
+            case 'mb-form-nstate': return html `<mb-form-nstate .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-nstate>`;
             case "mb-form-date": return html `<mb-form-date .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-date>`;
             case "mb-form-time": return html `<mb-form-time .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-time>`;
             case "mb-form-datetime": return html `<mb-form-datetime .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-datetime>`;
@@ -110,7 +111,7 @@ export class MBFormField extends LitElement {
             case "mb-form-array": return html `<mb-form-array .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-array>`;
             case "mb-form-object": return html ` <mb-form-object .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-object>`;
             case 'mb-form-error':
-            default: return html `<div class="alert alert-warning" role="alert">field type ${schema.type}  not implemented in object/array field!</div>`;
+            default: return html `<div class="alert alert-warning" role="alert">field name=${name} type ${schema.type}/${schema.field}  not implemented !</div>`;
         }
     }
     renderMandatory(name) {

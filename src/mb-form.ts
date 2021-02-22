@@ -91,8 +91,8 @@ export class MBForm extends LitElement {
             switch (true) {
                 case !isbasic(schema.type): break
                 case !!schema.enum:
-                case schema.oneOf && schema.oneOf.every((sch: Pojo) => isbasic(typeof sch.const)):
-                case schema.anyOf && schema.anyOf.every((sch: Pojo) => isbasic(typeof sch.const)):
+                case schema.oneOf && schema.oneOf.every((sch: Pojo) => 'const' in sch):
+                case schema.anyOf && schema.anyOf.every((sch: Pojo) => 'const' in sch):
                     schema.isenum = true;
                     break
             }
@@ -103,7 +103,14 @@ export class MBForm extends LitElement {
          * @param schema shema to solve references
          */
         const solvetype = (schema: Pojo) => {
-            if (schema.isenum) return schema.field = 'mb-form-enum'
+            if (schema.isenum) {
+                switch(true) {
+                    case schema.enum && schema.enum.length <= 3 : return schema.field = 'mb-form-nstate'
+                    case schema.oneOf && schema.oneOf.length <= 3 :  return schema.field = 'mb-form-nstate'
+                    case schema.anyOf && schema.anyOf.length <= 3 :  return schema.field = 'mb-form-nstate'
+                    default: return schema.field = 'mb-form-enum'
+                }
+            }
             switch (schema.type) {
                 case 'object': return schema.field = 'mb-form-object'
                 case 'array': return schema.field = 'mb-form-array'
