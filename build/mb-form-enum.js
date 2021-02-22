@@ -35,7 +35,7 @@ let MBFormEnum = class MBFormEnum extends MBFormField {
             </div>
         `;
     }
-    getValue() { return this.data[Array.isArray(this.data) ? this.index : this.name]; }
+    getValue() { return this.plainValue; }
     setValue(val) {
         switch (this.schema.type) {
             case 'integer':

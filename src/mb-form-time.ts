@@ -34,7 +34,7 @@ export class MBFormTime extends MBFormField {
             </div>
         `;
     }
-    getValue(): any { return this.data[Array.isArray(this.data) ? this.index : this.name] }
+    getValue(): any { return this.plainValue }
     setValue(val: any) {
         let convert
         switch(true) {

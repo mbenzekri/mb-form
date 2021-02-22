@@ -40,9 +40,12 @@ export class MBFormArray extends MBFormField {
         return html`
                 <div class="panel">
                     <h5 style="text-align:center" @click="${this.toggle}">${this.label}</h5>
-                    <div ?hidden="${this.collapsed}" ><hr> ${itemTemplates}</div>
-                    <div class="d-flex justify-content-end">
-                        <button type="button" @click="${this.add}" ?disabled="${this.nomore}" class="btn btn-primary btn-sm ">+</button>
+                    <div ?hidden="${this.collapsed}" >
+                        <hr> 
+                        ${itemTemplates}
+                        <div class="d-flex justify-content-end">
+                            <button type="button" @click="${this.add}" ?disabled="${this.nomore}" class="btn btn-primary btn-sm ">+</button>
+                        </div>
                     </div>
                 </div>`
     }
@@ -64,7 +67,7 @@ export class MBFormArray extends MBFormField {
     toggle() {
         this.collapsed = !this.collapsed
     }
-    getValue(): any { return this.data[Array.isArray(this.data) ? this.index : this.name] }
+    getValue(): any { return this.plainValue }
     setValue(val: any) {
         this.data[Array.isArray(this.data) ? this.index : this.name] = Array.isArray(val) ? val : undefined
     }

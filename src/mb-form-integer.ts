@@ -53,7 +53,7 @@ export class MBFormInteger extends MBFormField {
         if (this.min >= 0 && event.key === '-') return event.preventDefault();
         return
    }
-   getValue(): any { return this.data[Array.isArray(this.data) ? this.index : this.name] }
+   getValue(): any { return this.plainValue}
    setValue(val: any) {
         let convert
         switch(true) {

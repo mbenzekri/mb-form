@@ -37,7 +37,7 @@ let MBFormDate = class MBFormDate extends MBFormField {
         `;
     }
     getValue() {
-        if (this.data === undefined)
+        if (!this.data)
             return '';
         const val = Array.isArray(this.data) ? this.data[this.index] : this.data[this.name];
         switch (true) {

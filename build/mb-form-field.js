@@ -80,7 +80,7 @@ export class MBFormField extends LitElement {
         return html `
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-            ${this.renderField()}
+            <div style="padding-top: 5px">${this.renderField()}</div>
             ${this.valid ? html `` : html `<div><p>${this.message}</p></div>`}
         `;
     }
@@ -99,19 +99,24 @@ export class MBFormField extends LitElement {
             required = false;
         }
         switch (schema.field) {
-            case 'mb-form-enum': return html `<mb-form-enum .schema="${schema}" .name="${name}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-enum><br>`;
-            case "mb-form-date": return html `<mb-form-date .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-date><br>`;
-            case "mb-form-time": return html `<mb-form-time .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-time><br>`;
-            case "mb-form-datetime": return html `<mb-form-datetime .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-datetime><br>`;
-            case "mb-form-string": return html `<mb-form-string .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-string><br>`;
-            case "mb-form-boolean": return html `<mb-form-boolean .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-boolean><br>`;
-            case "mb-form-number": return html `<mb-form-number .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-number><br>`;
-            case "mb-form-integer": return html `<mb-form-integer .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-integer><br>`;
-            case "mb-form-array": return html `<mb-form-array .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-array><br>`;
+            case 'mb-form-enum': return html `<mb-form-enum .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-enum>`;
+            case "mb-form-date": return html `<mb-form-date .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-date>`;
+            case "mb-form-time": return html `<mb-form-time .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-time>`;
+            case "mb-form-datetime": return html `<mb-form-datetime .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-datetime>`;
+            case "mb-form-string": return html `<mb-form-string .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-string>`;
+            case "mb-form-boolean": return html `<mb-form-boolean .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-boolean>`;
+            case "mb-form-number": return html `<mb-form-number .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-number>`;
+            case "mb-form-integer": return html `<mb-form-integer .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-integer>`;
+            case "mb-form-array": return html `<mb-form-array .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-array>`;
             case "mb-form-object": return html ` <mb-form-object .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-object>`;
             case 'mb-form-error':
             default: return html `<div class="alert alert-warning" role="alert">field type ${schema.type}  not implemented in object/array field!</div>`;
         }
+    }
+    renderMandatory(name) {
+        return html `
+            ${name !== undefined ? html `*` : html ``}
+        `;
     }
     arrayAppend(index) {
         return html `
@@ -140,8 +145,8 @@ export class MBFormField extends LitElement {
         super.update(changedProperties);
     }
     get label() {
-        var _a;
-        return this.isItem ? this.index : (_a = this.schema.description) !== null && _a !== void 0 ? _a : this.name;
+        var _a, _b;
+        return `${this.isItem ? this.index : (_b = (_a = this.schema.title) !== null && _a !== void 0 ? _a : this.schema.description) !== null && _b !== void 0 ? _b : this.name}${this.required ? '*' : ''}`;
     }
     get isItem() {
         return Array.isArray(this.data);
@@ -194,6 +199,18 @@ export class MBFormField extends LitElement {
         this.message = message(this);
         (_b = this.input) === null || _b === void 0 ? void 0 : _b.classList.add(this.valid ? 'valid' : 'invalid');
         (_c = this.input) === null || _c === void 0 ? void 0 : _c.classList.remove(this.valid ? 'invalid' : 'valid');
+    }
+    get plainValue() {
+        if (!this.data)
+            return null;
+        if (Array.isArray(this.data)) {
+            return this.data[this.index];
+        }
+        else {
+            if (!(this.name in this.data))
+                this.data[this.name] = null;
+            return this.data[this.name];
+        }
     }
 }
 __decorate([

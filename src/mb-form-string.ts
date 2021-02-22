@@ -41,10 +41,7 @@ export class MBFormString extends MBFormField {
     get pattern() { return this.schema.pattern }
     get password() {return !!this.schema.options?.password }
     
-    getValue(): any {
-        return this.data[Array.isArray(this.data) ? this.index : this.name]
-    }
-
+    getValue(): any { return this.plainValue }
     setValue(val: any) {
         this.data[Array.isArray(this.data) ? this.index : this.name] = val.toString()
     }

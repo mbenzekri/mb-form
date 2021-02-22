@@ -32,12 +32,12 @@ let MBFormBoolean = class MBFormBoolean extends MBFormField {
                         @click="${this.change}"
                         ?required="${this.required}"
                     />
-                    <label class="form-check-label" for="input">&nbsp;${this.label} </label>
+                    <label class="form-check-label" for="input">&nbsp;${this.label}</label>
                 </div>
             </div>
         `;
     }
-    getValue() { return this.data[Array.isArray(this.data) ? this.index : this.name]; }
+    getValue() { return this.plainValue; }
     setValue(_val) {
         this.data[Array.isArray(this.data) ? this.index : this.name] = this.input.checked;
     }

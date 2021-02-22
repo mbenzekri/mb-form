@@ -30,41 +30,55 @@
 </body>
 <script>
     const schema = {
+        "definitions" : {
+            "adresse" :  {
+                "type": "object",
+                "properties" : {
+                    "numero" : {"type": "integer"},
+                    "rep" : {"type": "string", title: "répétition", "enum":['','bis','ter','quater',"quinquies","sexies","septies","octies","nonies","decies"]},
+                    "voie" : {"type": "string"},
+                    "complement" : {"type": "string"},
+                    "commune" : {"type": "string"},
+                    "codepost" : {"type": "string", pattern:'[0-9]{5}'},
+                },
+                "required": ["numero","voie","codepost","commune"]
+            }
+        },
         "type": "object",
-        "description": "Compte rendu",
+        "title": "Compte rendu",
         "properties": {
             "notmandatory": {
                 "type": "string",
-                "description": "any string",
+                "title": "any string",
             },
             "string": {
                 "type": "string",
-                "description": "input string",
+                "title": "input string",
                 "minLength": 5,
                 "maxLength": 10,
                 "pattern": "^[a-zA-Z ]*$"
             },
             "password": {
                 "type": "string",
-                "description": "password string",
+                "title": "password string",
                 "options" : {
                     "password" : true
                 }
             },
             "boolean": {
                 "type": "boolean",
-                "description": "input boolean",
+                "title": "input boolean",
             },
             "integer": {
                 "type": "integer",
-                "description": "input integer",
+                "title": "input integer",
                 "minimum": -10,
                 "maximum": 10,
                 "maximumExclusive": true
             },
             "number": {
                 "type": "number",
-                "description": "input number",
+                "title": "input number",
                 "minimum": 0.5,
                 "maximum": 3.5,
                 "maximumExclusive": true
@@ -72,42 +86,43 @@
             "date": {
                 "type": "string",
                 "format": "date",
-                "description": "input date",
+                "title": "input date",
             },
             "time": {
                 "type": "string",
                 "format": "time",
-                "description": "input time",
+                "title": "input time",
             },
             "datetime": {
                 "type": "string",
                 "format": "date-time",
-                "description": "input datetime",
+                "title": "input datetime",
             },
             "enum": {
                 "type": "string",
-                "description": "input enum",
+                "title": "input enum",
                 "enum": ["a","b","c","d","e"]
             },
             "enum2": {
                 "type": "integer",
-                "description": "input enum 2",
+                "title": "input enum 2",
                 "oneOf" : [
-                    { "const" : 1, "description" : "Priorité Haute"},
-                    { "const" : 2, "description" : "Priorité Moyenne"},
-                    { "const" : 3, "description" : "Priorité Basse"},
+                    { "const" : 1, "title" : "Priorité Haute"},
+                    { "const" : 2, "title" : "Priorité Moyenne"},
+                    { "const" : 3, "title" : "Priorité Basse"},
                 ]
             },
             "arrayint": {
                 "type": "array",
-                "description": "array of integers",
+                "title": "array of integers",
                 "items" : { "type" : "integer", "default" : 5},
                 "minItems": 3,
                 "maxItems": 5
             },
+            "maison" : { "$ref": "#/definitions/adresse" },
             "error": {
                 "type": "zztype",
-                "description": "input error",
+                "title": "input error",
             }
         },
         required: [ "string",
@@ -118,6 +133,7 @@
             "datetime",
             "enum",
             "enum2",
+            "adresse",
             "error"
         ]
     }
@@ -135,6 +151,7 @@
         "enum": null,
         "enum2": null,
         "arrayint": [10, 20, 30],
+        "maison" : {},
         "error" : 12
     }
     window.addEventListener('load', () => {

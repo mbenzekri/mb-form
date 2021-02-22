@@ -43,9 +43,7 @@ let MBFormString = class MBFormString extends MBFormField {
     get maxlength() { return this.schema.maxLength; }
     get pattern() { return this.schema.pattern; }
     get password() { var _a; return !!((_a = this.schema.options) === null || _a === void 0 ? void 0 : _a.password); }
-    getValue() {
-        return this.data[Array.isArray(this.data) ? this.index : this.name];
-    }
+    getValue() { return this.plainValue; }
     setValue(val) {
         this.data[Array.isArray(this.data) ? this.index : this.name] = val.toString();
     }

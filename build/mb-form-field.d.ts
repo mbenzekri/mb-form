@@ -22,11 +22,12 @@ export declare abstract class MBFormField extends LitElement {
     static get styles(): import("lit-element").CSSResult[];
     render(): TemplateResult;
     renderItem(nameorindex: string | number): TemplateResult;
+    renderMandatory(name: string): TemplateResult;
     arrayAppend(index?: number): TemplateResult;
     connectedCallback(): void;
     firstUpdated(_changedProperties: any): void;
     update(changedProperties: Map<string, any>): void;
-    get label(): any;
+    get label(): string;
     get isItem(): boolean;
     get isProperty(): boolean;
     get input(): HTMLInputElement;
@@ -40,5 +41,6 @@ export declare abstract class MBFormField extends LitElement {
     abstract renderField(): TemplateResult;
     abstract setValue(value: any): void;
     abstract getValue(): any;
+    get plainValue(): any;
 }
 //# sourceMappingURL=mb-form-field.d.ts.map

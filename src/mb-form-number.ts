@@ -65,7 +65,7 @@ export class MBFormNumber extends MBFormField {
         if ('minimum' in this.schema) return this.schema.minimum
         return ''
     }
-    getValue(): any { return this.data[Array.isArray(this.data) ? this.index : this.name] }
+    getValue(): any { return this.plainValue }
     setValue(val: any) {
         let convert
         switch(true) {

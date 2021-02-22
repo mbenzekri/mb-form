@@ -63,7 +63,7 @@ let MBFormInteger = class MBFormInteger extends MBFormField {
             return event.preventDefault();
         return;
     }
-    getValue() { return this.data[Array.isArray(this.data) ? this.index : this.name]; }
+    getValue() { return this.plainValue; }
     setValue(val) {
         let convert;
         switch (true) {

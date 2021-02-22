@@ -39,9 +39,9 @@ let MBFormDatetime = class MBFormDatetime extends MBFormField {
         `;
     }
     getValue() {
-        if (this.data === undefined)
+        if (!this.data)
             return '';
-        const val = Array.isArray(this.data) ? this.data[this.index] : this.data[this.name];
+        const val = this.plainValue;
         switch (true) {
             case typeof val === 'string': return iso(new Date(val));
             case val instanceof Date: return iso(val);
