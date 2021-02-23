@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script type="module" src="../build/mb-form-string.js"></script>
     <script type="module" src="../build/mb-form-integer.js"></script>
+    <script type="module" src="../build/mb-form-range.js"></script>
     <script type="module" src="../build/mb-form-number.js"></script>
     <script type="module" src="../build/mb-form-date.js"></script>
     <script type="module" src="../build/mb-form-time.js"></script>
@@ -81,9 +82,15 @@
             "integer": {
                 "type": "integer",
                 "title": "input integer",
-                "minimum": -10,
-                "maximum": 10,
+                "minimum": -100,
+                "maximum": 100,
                 "maximumExclusive": true
+            },
+            "range": {
+                "type": "integer",
+                "title": "input range",
+                "minimum": 1,
+                "maximum": 5,
             },
             "number": {
                 "type": "number",
@@ -126,7 +133,7 @@
             "arrayint": {
                 "type": "array",
                 "title": "array of integers",
-                "items" : { "type" : "integer", "default" : 5},
+                "items" : { "type" : "integer", "default" : 5, "minimum":0},
                 "minItems": 3,
                 "maxItems": 5
             },
@@ -155,6 +162,7 @@
         "boolean": true,
         "password": 'dontsayit',
         "integer": 5,
+        "range": 1,
         "number": 2.71828,
         "date": new Date(),
         "time": '13:15',

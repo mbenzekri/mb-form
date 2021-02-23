@@ -110,7 +110,10 @@ let MBForm = class MBForm extends LitElement {
             switch (schema.type) {
                 case 'object': return schema.field = 'mb-form-object';
                 case 'array': return schema.field = 'mb-form-array';
-                case 'integer': return schema.field = 'mb-form-integer';
+                case 'integer':
+                    return (schema.minimum && schema.maximum && (schema.maximum - schema.minimum) <= 10)
+                        ? schema.field = 'mb-form-range'
+                        : schema.field = 'mb-form-integer';
                 case 'number': return schema.field = 'mb-form-number';
                 case 'boolean': return schema.field = 'mb-form-boolean';
                 case 'string':

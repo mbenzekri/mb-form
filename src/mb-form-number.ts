@@ -15,9 +15,7 @@ export class MBFormNumber extends MBFormField {
     }
 
     static get styles() {
-        return [
-            ...super.styles,
-            css`
+        return [css`
             /* Chrome, Safari, Edge, Opera */
             input::-webkit-outer-spin-button,
             input::-webkit-inner-spin-button {

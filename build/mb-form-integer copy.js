@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { css, customElement, html } from "lit-element";
+import { customElement, html } from "lit-element";
 import { MBFormField } from "./mb-form-field";
 /**
  * @prop schema
@@ -13,24 +13,11 @@ import { MBFormField } from "./mb-form-field";
  * @prop name
  * @prop index
  */
-let MBFormNumber = class MBFormNumber extends MBFormField {
+let MBFormInteger = class MBFormInteger extends MBFormField {
     constructor() {
-        super({ type: 'number' }, 3.141599265);
+        super({ type: 'integer' }, 123456789);
     }
-    static get styles() {
-        return [css `
-            /* Chrome, Safari, Edge, Opera */
-            input::-webkit-outer-spin-button,
-            input::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-            /* Firefox */
-            input[type=number] {
-                -moz-appearance: textfield;
-            }`
-        ];
-    }
+    convert(value) { return (typeof value === 'number') ? Math.floor(value) : parseInt(value.toString(), 10); }
     renderField() {
         return html `
             <div class="form-group row">
@@ -39,13 +26,14 @@ let MBFormNumber = class MBFormNumber extends MBFormField {
                     <div class="input-group">
                         <input 
                             class="form-control" 
-                            type="number" 
-                            id="input"
+                            type="number"  
+                            id="input" 
                             .value="${this.value}" 
                             @input="${this.change}"
+                            @keypress="${this.keypress}"
                             .min="${this.min}"
                             .max="${this.max}"
-                            step="1e-12"
+                            step="1"
                             ?required="${this.required}"
                         />
                         ${this.arrayAppend(this.index)}
@@ -56,34 +44,41 @@ let MBFormNumber = class MBFormNumber extends MBFormField {
     }
     get max() {
         if (this.schema.maximumExclusive && 'maximum' in this.schema)
-            return this.schema.maximum - 1e-12;
+            return this.schema.maximum - 1;
         if ('maximum' in this.schema)
             return this.schema.maximum;
         return '';
     }
     get min() {
         if (this.schema.minimumExclusive && 'minimum' in this.schema)
-            return this.schema.minimum + 1e-12;
+            return this.schema.minimum + 1;
         if ('minimum' in this.schema)
             return this.schema.minimum;
         return '';
+    }
+    keypress(event) {
+        if (!/[-0123456789]/.test(event.key))
+            return event.preventDefault();
+        if (this.min >= 0 && event.key === '-')
+            return event.preventDefault();
+        return;
     }
     getValue() { return this.plainValue; }
     setValue(val) {
         let convert;
         switch (true) {
             case typeof val === 'string':
-                convert = parseFloat(val);
+                convert = parseInt(val);
                 break;
             case typeof val === 'number':
-                convert = val;
+                convert = Math.floor(val);
                 break;
         }
         this.data[Array.isArray(this.data) ? this.index : this.name] = convert;
     }
 };
-MBFormNumber = __decorate([
-    customElement("mb-form-number")
-], MBFormNumber);
-export { MBFormNumber };
-//# sourceMappingURL=mb-form-number.js.map
+MBFormInteger = __decorate([
+    customElement("mb-form-integer")
+], MBFormInteger);
+export { MBFormInteger };
+//# sourceMappingURL=mb-form-integer copy.js.map
