@@ -102,6 +102,7 @@ export abstract class MBFormField extends LitElement {
             case "mb-form-date": return html`<mb-form-date .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-date>`
             case "mb-form-time": return html`<mb-form-time .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-time>`
             case "mb-form-datetime": return html`<mb-form-datetime .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-datetime>`
+            case "mb-form-textarea": return html`<mb-form-textarea .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-textarea>`
             case "mb-form-string": return html`<mb-form-string .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-string>`
             case "mb-form-boolean": return html`<mb-form-boolean .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-boolean>`
             case "mb-form-number": return html`<mb-form-number .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-number>`

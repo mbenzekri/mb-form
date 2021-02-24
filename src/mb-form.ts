@@ -126,6 +126,7 @@ export class MBForm extends LitElement {
                         case "time": return schema.field = 'mb-form-time'
                         case "date-time": return schema.field = 'mb-form-datetime'
                     }
+                    if (!schema.format && schema.maxLength > 100) return schema.field = 'mb-form-textarea'
                     return schema.field = 'mb-form-string'
             }
             return 'mb-form-error'

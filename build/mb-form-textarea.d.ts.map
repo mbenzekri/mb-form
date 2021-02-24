@@ -1,0 +1,1 @@
+{"version":3,"file":"mb-form-textarea.d.ts","sourceRoot":"","sources":["../src/mb-form-textarea.ts"],"names":[],"mappings":"AAIA,OAAO,EAAE,WAAW,EAAE,MAAM,iBAAiB,CAAC;AAE9C;;;;;GAKG;AACH,qBACa,cAAe,SAAQ,WAAW;;IAI3C,WAAW;IAoBX,IAAI,SAAS,QAAmC;IAChD,IAAI,SAAS,QAAmC;IAChD,IAAI,OAAO,QAAiC;IAC5C,IAAI,QAAQ,YAA4C;IAExD,QAAQ,IAAI,GAAG;IACf,QAAQ,CAAC,GAAG,EAAE,GAAG;CAIpB"}
