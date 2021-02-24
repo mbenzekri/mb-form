@@ -24,7 +24,7 @@ let MBFormString = class MBFormString extends MBFormField {
                 <label for="input" class="col-sm-3 col-form-label">${this.label}</label> 
                 <div class="col-sm-9">
                     <input id="input" 
-                        type="${this.password ? 'password' : 'text'}" 
+                        type="${this.type}" 
                         class="form-control" 
                         placeholder="${this.label}"
                         .value="${this.value}" 
@@ -42,7 +42,19 @@ let MBFormString = class MBFormString extends MBFormField {
     get minlength() { return this.schema.minLength; }
     get maxlength() { return this.schema.maxLength; }
     get pattern() { return this.schema.pattern; }
-    get password() { var _a; return !!((_a = this.schema.options) === null || _a === void 0 ? void 0 : _a.password); }
+    get type() {
+        switch (this.schema.format) {
+            case 'color': return 'color';
+            case 'email': return 'email';
+            case 'password': return 'password';
+            case 'uri': return 'url';
+            default: return 'text';
+        }
+        // 'month' : HTML5 un contrôle qui permet de saisir un mois et une année (sans fuseau horaire).
+        // 'week' : HTML5 un contrôle permettant de saisir une date représentée par un numéro de semaine et une année (sans indication de fuseau horaire        }
+        // hidden : un contrôle qui n'est pas affiché mais dont la valeur est envoyée au serveur.
+        // file : un contrôle qui permet de sélectionner un fichier. L'attribut accept définit les types de fichiers qui peuvent être sélectionnés.
+    }
     getValue() { return this.plainValue; }
     setValue(val) {
         this.data[Array.isArray(this.data) ? this.index : this.name] = val.toString();

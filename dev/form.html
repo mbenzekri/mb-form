@@ -58,15 +58,8 @@
         "type": "object",
         "title": "Compte rendu",
         "properties": {
-            "notmandatory": {
-                "type": "string",
-                "title": "any string",
-            },
-            "verylong": {
-                "type": "string",
-                "title": "very long",
-                "maxLength": 500
-            },
+            "notmandatory": { "type": "string", "title": "any string", },
+            "verylong": { "type": "string", "title": "very long", "maxLength": 500 },
             "string": {
                 "type": "string",
                 "title": "input string",
@@ -74,17 +67,11 @@
                 "maxLength": 10,
                 "pattern": "^[a-zA-Z ]*$"
             },
-            "password": {
-                "type": "string",
-                "title": "password string",
-                "options" : {
-                    "password" : true
-                }
-            },
-            "boolean": {
-                "type": "boolean",
-                "title": "input boolean",
-            },
+            "password": { "type": "string", "format" : "password", "title": "password string", },
+            "color": { "type": "string", "format" : "color", "title":"color", "default" :"#FF0000", },
+            "email": { "type": "string", "format" : "email", "title": "email string", },
+            "url": { "type": "string", "format" : "uri", "title": "url string", },
+            "boolean": { "type": "boolean", "title": "input boolean", },
             "integer": {
                 "type": "integer",
                 "title": "input integer",
@@ -105,26 +92,11 @@
                 "maximum": 3.5,
                 "maximumExclusive": true
             },
-            "date": {
-                "type": "string",
-                "format": "date",
-                "title": "input date",
-            },
-            "time": {
-                "type": "string",
-                "format": "time",
-                "title": "input time",
-            },
-            "datetime": {
-                "type": "string",
-                "format": "date-time",
-                "title": "input datetime",
-            },
-            "enum": {
-                "type": "string",
-                "title": "input enum",
-                "enum": ["a","b","c","d","e"]
-            },
+            "date": { "type": "string", "format": "date", "title": "input date", },
+            "time": { "type": "string", "format": "time", "title": "input time", },
+            "datetime": { "type": "string", "format": "date-time", "title": "input datetime", },
+            "fuzzy": { "$ref" : "#/definitions/fuzzy" },
+            "enum": { "type": "string", "title": "input enum", "enum": ["a","b","c","d","e"] },
             "enum2": {
                 "type": "integer",
                 "title": "input enum 2",
@@ -135,7 +107,6 @@
                     { "const" : 4, "title" : "Priorité nulle"},
                 ]
             },
-            "fuzzy": { "$ref" : "#/definitions/fuzzy" },
             "arrayint": {
                 "type": "array",
                 "title": "array of integers",
@@ -144,10 +115,7 @@
                 "maxItems": 5
             },
             "maison" : { "$ref": "#/definitions/adresse" },
-            "error": {
-                "type": "zztype",
-                "title": "input error",
-            }
+            "error": { "type": "zztype", "title": "input error", }
         },
         required: [ "string",
             "password",
@@ -167,6 +135,7 @@
         "string": 'a',
         "boolean": true,
         "password": 'dontsayit',
+        "color" : "#0000FF",
         "integer": 5,
         "range": 1,
         "number": 2.71828,
