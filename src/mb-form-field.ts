@@ -148,7 +148,10 @@ export abstract class MBFormField extends LitElement {
     }
 
     get label() {
-        return `${this.isItem ? this.index : this.schema.title ?? this.schema.description ?? this.name}${this.required ? '*' : ''}`
+        return this.isItem ? this.index : this.schema.title ?? this.schema.description ?? this.name
+    }
+    get renderLabel() {
+        return html`${this.isItem ? html`<span class="badge bg-primary rounded-pill">${this.label}</span>` : html`${this.label}${this.required ? '*' : ''}` }`
     }
     get isItem() {
         return Array.isArray(this.data)

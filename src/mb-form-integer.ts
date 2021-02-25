@@ -17,7 +17,7 @@ export class MBFormInteger extends MBFormField {
     renderField() {
         return html`
             <div class="form-group row">
-                <label for="input" class="col-sm-3 col-form-label">${this.label}</label> 
+                <label for="input" class="col-sm-3 col-form-label">${this.renderLabel}</label> 
                 <div class="col-sm-9">
                     <div class="input-group">
                         <input 
@@ -32,7 +32,6 @@ export class MBFormInteger extends MBFormField {
                             step="1"
                             ?required="${this.required}"
                         />
-                        ${this.arrayAppend(this.index)}
                     </div>
                 </div>
             </div>

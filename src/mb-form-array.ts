@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { customElement, html, css, property, TemplateResult } from "lit-element";
+import { customElement, html, css, property, /* TemplateResult */ } from "lit-element";
 import { MBFormField } from "./mb-form-field";
 
 /**
@@ -12,6 +12,7 @@ import { MBFormField } from "./mb-form-field";
 export class MBFormArray extends MBFormField {
 
     @property({ attribute: false }) collapsed = false
+    @property({ attribute: false }) current: number | null = null
 
     constructor() {
         super({ type: 'array' }, [])
@@ -30,33 +31,90 @@ export class MBFormArray extends MBFormField {
     }
     connectedCallback() {
         super.connectedCallback()
-        this.addEventListener('remove-item' as any,this.removeItem) 
+        this.addEventListener('remove-item' as any, this.handleRemove)
     }
     renderField() {
-        const itemTemplates: TemplateResult[] = [];
-        this.data && this.data[this.name].forEach((_v: any, index: number) => {
-            itemTemplates.push(this.renderItem(index))
-        });
+        if (!this.data) return html`<div class="form-group row"></div>`
+
         return html`
-                <div class="panel">
-                    <h5 style="text-align:center" @click="${this.toggle}">${this.label}</h5>
-                    <div ?hidden="${this.collapsed}" >
-                        <hr> 
-                        ${itemTemplates}
-                        <div class="d-flex justify-content-end">
-                            <button type="button" @click="${this.add}" ?disabled="${this.nomore}" class="btn btn-primary btn-sm ">+</button>
-                        </div>
+            <div  @focusout="${this.blur}" >
+                <div class="form-group row">
+                    <label for="input" class="col-sm-3 col-form-label">${this.renderLabel}</label>
+                    <div class="col-sm-9"> 
+                        <ul ?hidden="${this.collapsed}" class="list-group" >
+                            ${this.data[this.name].map((item: unknown, i: number) => html`
+                                ${(this.current !== i) 
+                                    ? html`<li 
+                                                id="${i}"
+                                                draggable="true" 
+                                                @dragstart="${(ev: DragEvent) => this.drag(ev,i)}"
+                                                @dragover="${this.allowDrop}"
+                                                @drop="${this.drop}"
+                                                @click="${() => this.edit(i)}" 
+                                                class="list-group-item"
+                                            >
+                                            <span class="badge bg-primary rounded-pill">${i}</span>
+                                            ${item}
+                                            <button @click="${() => this.del(i)}" type="button" style="float:right" class="btn-close" aria-label="Close"></button>
+                                        </li>` 
+                                    : html``
+                                }
+                                ${(this.current === i) 
+                                    ? html`<li @focusout="${this.blur}" class="list-group-item">
+                                            ${this.renderItem(this.current)}
+                                        </li>` 
+                                    : html``
+                                }
+                            `)}
+                            <li class="list-group-item"><button type="button" @click="${this.add}" ?disabled="${this.nomore}" class="btn btn-primary btn-sm ">Ajouter</button></li>
+                        </ul>
                     </div>
-                </div>`
+                </div>
+            </div>`
     }
-    removeItem(event: CustomEvent) {
+    handleRemove(event: CustomEvent) {
         const index = event.detail.index as number
-        this.value.splice(index,1)
+        this.del(index)
         event.preventDefault()
         event.stopImmediatePropagation()
+    }
+    drag(ev: DragEvent, index: number) {
+        if (ev.dataTransfer) {
+            ev.dataTransfer.setData('text', index.toString());
+        }
+        else if ((ev as any).originalEvent.dataTransfer){
+            (ev as any).originalEvent.dataTransfer.setData('text', index.toString());
+        }
+        this.current = null
+        this.requestUpdate()
+      }
+
+    drop(ev: DragEvent) {
+        if (ev.dataTransfer) {
+            const from = parseInt(ev.dataTransfer.getData("text"),10)
+            const to = parseInt((ev.target as HTMLElement).id)
+            this.value.splice(to, 0, this.value.splice(from, 1)[0])
+            this.requestUpdate()
+        }
+        ev.preventDefault();
+    }
+    allowDrop(ev: DragEvent) {
+        ev.preventDefault();
+    }
+    blur() {
+        this.current = null 
+    }
+    del(index: number) {
+        this.value.splice(index, 1)
+        this.current = null
+        this.requestUpdate()
+    }
+    edit(index: number) {
+        this.current = index
         this.requestUpdate()
     }
     add() {
+        this.current = this.value.length
         this.value.push(this.default(this.schema.items, true))
         this.requestUpdate()
     }

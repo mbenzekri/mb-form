@@ -1,4 +1,3 @@
-import { TemplateResult } from "lit-element";
 import { MBFormField } from "./mb-form-field";
 /**
  * @prop schema
@@ -8,11 +7,18 @@ import { MBFormField } from "./mb-form-field";
  */
 export declare class MBFormArray extends MBFormField {
     collapsed: boolean;
+    current: number | null;
     constructor();
     static get styles(): import("lit-element").CSSResult[];
     connectedCallback(): void;
-    renderField(): TemplateResult;
-    removeItem(event: CustomEvent): void;
+    renderField(): import("lit-element").TemplateResult;
+    handleRemove(event: CustomEvent): void;
+    drag(ev: DragEvent, index: number): void;
+    drop(ev: DragEvent): void;
+    allowDrop(ev: DragEvent): void;
+    blur(): void;
+    del(index: number): void;
+    edit(index: number): void;
     add(): void;
     get nomore(): boolean;
     toggle(): void;

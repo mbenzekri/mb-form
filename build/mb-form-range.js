@@ -67,7 +67,7 @@ let MBFormRange = class MBFormRange extends MBFormField {
     renderField() {
         return html `
             <div class="form-group row">
-                <label for="input" class="col-sm-3 col-form-label">${this.label}</label> 
+                <label for="input" class="col-sm-3 col-form-label">${this.renderLabel}</label> 
                 <div class="col-sm-9">
                     <div class="input-group">
                         <input 
@@ -82,7 +82,8 @@ let MBFormRange = class MBFormRange extends MBFormField {
                             ?required="${this.required}"
                         />
                         <div class="input-group-append" style="max-width:5em" >
-                            <input type=number readonly style="max-width:5em"  class="input-group-text" .value="${this.value}"></div>
+                            <span class="input-group-text" >${this.value}</span>
+                        </div>
                         ${this.arrayAppend(this.index)}
                     </div>
                 </div>

@@ -34,7 +34,7 @@ let MBFormNState = class MBFormNState extends MBFormField {
     renderField() {
         return html `
             <div class="form-group row">
-                <label for="input" class="col-sm-3 col-form-label">${this.label}</label> 
+                <label for="input" class="col-sm-3 col-form-label">${this.renderLabel}</label> 
                 <div class="col-sm-9">
                 ${this.values.map((item, i) => html `
                     <div class="form-check form-check-inline">
