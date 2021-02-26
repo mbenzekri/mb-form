@@ -15,7 +15,9 @@ export class MBFormNumber extends MBFormField {
     }
 
     static get styles() {
-        return [css`
+        return [
+            ...super.styles,
+            css`
             /* Chrome, Safari, Edge, Opera */
             input::-webkit-outer-spin-button,
             input::-webkit-inner-spin-button {
@@ -28,7 +30,6 @@ export class MBFormNumber extends MBFormField {
             }`
         ]
     }
-    
 
     renderField() {
         return html`
@@ -47,7 +48,6 @@ export class MBFormNumber extends MBFormField {
                             step="1e-12"
                             ?required="${this.required}"
                         />
-                        ${this.arrayAppend(this.index)}
                     </div>
                 </div>
             </div>
@@ -66,11 +66,11 @@ export class MBFormNumber extends MBFormField {
     getValue(): any { return this.plainValue }
     setValue(val: any) {
         let convert
-        switch(true) {
-            case typeof val === 'string' : 
+        switch (true) {
+            case typeof val === 'string':
                 convert = parseFloat(val)
                 break;
-            case typeof val === 'number' : 
+            case typeof val === 'number':
                 convert = val
                 break;
         }

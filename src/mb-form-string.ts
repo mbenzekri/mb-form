@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { customElement, html } from "lit-element";
+import { css, customElement, html } from "lit-element";
 import {ifDefined} from 'lit-html/directives/if-defined';
 
 import { MBFormField } from "./mb-form-field";
@@ -15,26 +15,44 @@ export class MBFormString extends MBFormField {
     constructor() {
         super({ type: 'string' }, 'initial string')
     }
+    static get styles() {
+        return [
+            ...super.styles,
+            css`
+            input[type="color"] {
+                height: 38px
+            }`
+        ]
+    }
     renderField() {
         return html`
             <div class="form-group row">
                 <label for="input" class="col-sm-3 col-form-label">${this.renderLabel}</label> 
                 <div class="col-sm-9">
-                    <input id="input" 
-                        type="${this.type}" 
-                        class="form-control" 
-                        placeholder="${this.label}"
-                        .value="${this.value}" 
-                        @input="${this.change}"
-                        @keypress="${this.change}"
-                        minlength="${ifDefined(this.minlength)}"
-                        maxlength="${ifDefined(this.maxlength)}"
-                        pattern="${ifDefined(this.pattern)}"
-                        ?required="${this.required}"
-                    />
+                    <div class="input-group" >
+                        <input id="input" 
+                            type="${this.type}" 
+                            class="form-control" 
+                            placeholder="${this.label}"
+                            .value="${this.value}" 
+                            @input="${this.change}"
+                            @keypress="${this.change}"
+                            minlength="${ifDefined(this.minlength)}"
+                            maxlength="${ifDefined(this.maxlength)}"
+                            pattern="${ifDefined(this.pattern)}"
+                            ?required="${this.required}"
+                        />
+                        <div ?hidden="${this.type !== 'color'}" class="input-group-append" style="max-width:5em" >
+                            <span class="input-group-text" >${this.value}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
+    }
+    change() {
+        super.change()
+        this.requestUpdate()
     }
     get minlength() { return this.schema.minLength }
     get maxlength() { return this.schema.maxLength }

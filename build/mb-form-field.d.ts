@@ -23,7 +23,6 @@ export declare abstract class MBFormField extends LitElement {
     render(): TemplateResult;
     renderItem(nameorindex: string | number): TemplateResult;
     renderMandatory(name: string): TemplateResult;
-    arrayAppend(index?: number): TemplateResult;
     connectedCallback(): void;
     firstUpdated(_changedProperties: any): void;
     update(changedProperties: Map<string, any>): void;

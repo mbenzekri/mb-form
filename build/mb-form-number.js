@@ -18,7 +18,9 @@ let MBFormNumber = class MBFormNumber extends MBFormField {
         super({ type: 'number' }, 3.141599265);
     }
     static get styles() {
-        return [css `
+        return [
+            ...super.styles,
+            css `
             /* Chrome, Safari, Edge, Opera */
             input::-webkit-outer-spin-button,
             input::-webkit-inner-spin-button {
@@ -48,7 +50,6 @@ let MBFormNumber = class MBFormNumber extends MBFormField {
                             step="1e-12"
                             ?required="${this.required}"
                         />
-                        ${this.arrayAppend(this.index)}
                     </div>
                 </div>
             </div>

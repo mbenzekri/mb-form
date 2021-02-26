@@ -40,6 +40,7 @@ let MBFormObject = class MBFormObject extends MBFormField {
             ? html `<div @click="${this.focusout}">${this.renderLabel}</div>${itemTemplates}`
             : html `<div class="panel">
                         <label class="col-sm-3 col-form-label" @click="${this.toggle}" >${this.renderLabel}</label>
+                        ${this.collapsed ? html `${this.abstract(this.schema, this.value)}` : html ``}
                         <hr ?hidden="${this.collapsed}" style="margin: 0 0" >
                         <div ?hidden="${this.collapsed}" > ${itemTemplates} </div>
                     </div>`}`;

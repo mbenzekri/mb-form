@@ -7,7 +7,9 @@ import { MBFormField } from "./mb-form-field";
  */
 export declare class MBFormString extends MBFormField {
     constructor();
+    static get styles(): import("lit-element").CSSResult[];
     renderField(): import("lit-element").TemplateResult;
+    change(): void;
     get minlength(): any;
     get maxlength(): any;
     get pattern(): any;

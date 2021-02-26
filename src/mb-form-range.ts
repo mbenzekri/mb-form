@@ -14,7 +14,9 @@ export class MBFormRange extends MBFormField {
         super({ type: 'integer', minimum: 0, maximum: 10 },5);
     }
     static get styles() {
-        return [css`
+        return [
+          ...super.styles,
+          css`
           input[type=range]::-webkit-slider-runnable-track {
             background: lightgray;
             border: 0.2px solid rgba(1, 1, 1, 0.3);
@@ -80,7 +82,6 @@ export class MBFormRange extends MBFormField {
                         <div class="input-group-append" style="max-width:5em" >
                             <span class="input-group-text" >${this.value}</span>
                         </div>
-                        ${this.arrayAppend(this.index)}
                     </div>
                 </div>
             </div>

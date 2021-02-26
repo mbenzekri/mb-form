@@ -119,13 +119,7 @@ export abstract class MBFormField extends LitElement {
             ${name !== undefined ? html`*` : html``}
         `
     }
-    arrayAppend(index?: number): TemplateResult {
-        return html`
-            ${index !== undefined
-                ? html`<div class="input-group-append"> <span class="btn btn-secondary input-group-text" @click="${this.dropItem}" >x</span></div>`
-                : html``
-            }`
-    }
+
     connectedCallback() {
         super.connectedCallback()
     }
