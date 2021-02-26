@@ -20,15 +20,31 @@ export declare abstract class MBFormField extends LitElement {
     message: string;
     constructor(schema: Pojo, data: any);
     static get styles(): import("lit-element").CSSResult[];
+    /**
+     * render method for this field component (call renderField abstract rendering method)
+     */
     render(): TemplateResult;
-    renderItem(nameorindex: string | number): TemplateResult;
-    renderMandatory(name: string): TemplateResult;
-    connectedCallback(): void;
-    firstUpdated(_changedProperties: any): void;
-    update(changedProperties: Map<string, any>): void;
-    abstract(schema: Pojo, value: any): string;
-    get label(): any;
+    /**
+     * render method for label
+     */
     get renderLabel(): TemplateResult;
+    /**
+     * render an item of this field (item is a property of object or element of array)
+     * used by composed fields (array or object)
+     * @param nameorindex
+     */
+    renderItem(nameorindex: string | number): TemplateResult;
+    firstUpdated(_changedProperties: any): void;
+    /**
+     * return an abstract for a given schmea,value pair
+     * @param schema
+     * @param value
+     */
+    abstract(schema: Pojo, value: any): string;
+    /**
+     * return label for this field
+     */
+    get label(): any;
     get isItem(): boolean;
     get isProperty(): boolean;
     get input(): HTMLInputElement;

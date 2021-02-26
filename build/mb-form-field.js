@@ -76,6 +76,9 @@ export class MBFormField extends LitElement {
             }
         `];
     }
+    /**
+     * render method for this field component (call renderField abstract rendering method)
+     */
     render() {
         return html `
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -84,6 +87,19 @@ export class MBFormField extends LitElement {
             ${this.valid ? html `` : html `<div><p>${this.message}</p></div>`}
         `;
     }
+    /**
+     * render method for label
+     */
+    get renderLabel() {
+        return html `${this.isItem
+            ? html `<span class="badge bg-primary rounded-pill">${this.label}</span>`
+            : html `${this.label}${this.required ? '*' : ''}`}`;
+    }
+    /**
+     * render an item of this field (item is a property of object or element of array)
+     * used by composed fields (array or object)
+     * @param nameorindex
+     */
     renderItem(nameorindex) {
         let name, index, schema, required;
         if (typeof nameorindex === 'string') {
@@ -116,14 +132,6 @@ export class MBFormField extends LitElement {
             default: return html `<div class="alert alert-warning" role="alert">field name=${name} type ${schema.type}/${schema.field}  not implemented !</div>`;
         }
     }
-    renderMandatory(name) {
-        return html `
-            ${name !== undefined ? html `*` : html ``}
-        `;
-    }
-    connectedCallback() {
-        super.connectedCallback();
-    }
     firstUpdated(_changedProperties) {
         var _a;
         (_a = this.input) === null || _a === void 0 ? void 0 : _a.addEventListener('keydown', (evt) => {
@@ -138,9 +146,11 @@ export class MBFormField extends LitElement {
         });
         this.check();
     }
-    update(changedProperties) {
-        super.update(changedProperties);
-    }
+    /**
+     * return an abstract for a given schmea,value pair
+     * @param schema
+     * @param value
+     */
     abstract(schema, value) {
         switch (true) {
             case value === null || value === undefined: return 'null';
@@ -157,12 +167,12 @@ export class MBFormField extends LitElement {
             default: return value;
         }
     }
+    /**
+     * return label for this field
+     */
     get label() {
         var _a, _b;
         return this.isItem ? this.index : (_b = (_a = this.schema.title) !== null && _a !== void 0 ? _a : this.schema.description) !== null && _b !== void 0 ? _b : this.name;
-    }
-    get renderLabel() {
-        return html `${this.isItem ? html `<span class="badge bg-primary rounded-pill">${this.label}</span>` : html `${this.label}${this.required ? '*' : ''}`}`;
     }
     get isItem() {
         return Array.isArray(this.data);

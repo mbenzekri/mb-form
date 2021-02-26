@@ -73,6 +73,9 @@ export abstract class MBFormField extends LitElement {
             }
         `]
     }
+    /**
+     * render method for this field component (call renderField abstract rendering method)
+     */
     render() {
         return html`
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -81,6 +84,21 @@ export abstract class MBFormField extends LitElement {
             ${this.valid ? html`` : html`<div><p>${this.message}</p></div>`}
         `
     }
+    /**
+     * render method for label
+     */
+    get renderLabel() {
+        return html`${this.isItem
+            ? html`<span class="badge bg-primary rounded-pill">${this.label}</span>`
+            : html`${this.label}${this.required ? '*' : ''}`
+            }`
+    }
+
+    /**
+     * render an item of this field (item is a property of object or element of array)
+     * used by composed fields (array or object)
+     * @param nameorindex 
+     */
     renderItem(nameorindex: string | number): TemplateResult {
         let name: string | undefined, index: number | undefined, schema: Pojo, required: boolean;
 
@@ -114,15 +132,7 @@ export abstract class MBFormField extends LitElement {
             default: return html`<div class="alert alert-warning" role="alert">field name=${name} type ${schema.type}/${schema.field}  not implemented !</div>`
         }
     }
-    renderMandatory(name: string): TemplateResult {
-        return html`
-            ${name !== undefined ? html`*` : html``}
-        `
-    }
 
-    connectedCallback() {
-        super.connectedCallback()
-    }
     firstUpdated(_changedProperties: any) {
         this.input?.addEventListener('keydown', (evt: KeyboardEvent) => {
             if (/^F\d+$/.test(evt.key)) {
@@ -137,10 +147,11 @@ export abstract class MBFormField extends LitElement {
         this.check()
     }
 
-    update(changedProperties: Map<string, any>) {
-        super.update(changedProperties)
-    }
-
+    /**
+     * return an abstract for a given schmea,value pair 
+     * @param schema 
+     * @param value 
+     */
     abstract(schema: Pojo, value: any): string {
         switch (true) {
             case value === null || value === undefined: return 'null'
@@ -152,17 +163,17 @@ export abstract class MBFormField extends LitElement {
             case typeof value === 'object':
                 return Object.keys(schema.properties)
                     .filter((property: string) => value[property])
-                    .map((property: string) => this.abstract(schema.properties[property],value[property]))
+                    .map((property: string) => this.abstract(schema.properties[property], value[property]))
                     .join(', ')
             default: return value
         }
     }
 
+    /**
+     * return label for this field
+     */
     get label() {
         return this.isItem ? this.index : this.schema.title ?? this.schema.description ?? this.name
-    }
-    get renderLabel() {
-        return html`${this.isItem ? html`<span class="badge bg-primary rounded-pill">${this.label}</span>` : html`${this.label}${this.required ? '*' : ''}`}`
     }
     get isItem() {
         return Array.isArray(this.data)

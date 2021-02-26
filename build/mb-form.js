@@ -31,18 +31,18 @@ let MBForm = class MBForm extends LitElement {
         this.requestUpdate();
     }
     render() {
-        if (this._schema.type === 'object')
-            return html `
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-                <mb-form-object name="content" .data="${this.obj}" .schema="${this.schema}"></mb-form-object>
-                <hr>
-                <div class="d-flex justify-content-end">
-                    <button type="button"  @click="${this.confirm}" class="btn btn-primary">${this.confirmlabel}</button> 
-                    <button type="button"  @click="${this.cancel}" class="btn btn-danger">${this.cancellabel}</button>
-                </div>
-            `;
-        return html `<div>Root type json-schema must be object !</div>`;
+        return html `
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+            ${Array.isArray(this.data)
+            ? html `<mb-form-array name="content" .data="${this.obj}" .schema="${this.schema}"></mb-form-array>`
+            : html `<mb-form-object name="content" .data="${this.obj}" .schema="${this.schema}"></mb-form-object>`}
+            <hr>
+            <div class="d-flex justify-content-end">
+                <button type="button"  @click="${this.confirm}" class="btn btn-primary">${this.confirmlabel}</button> 
+                <button type="button"  @click="${this.cancel}" class="btn btn-danger">${this.cancellabel}</button>
+            </div>
+        `;
     }
     confirm() {
         const event = new CustomEvent('validate', {
