@@ -10,10 +10,10 @@ const valdesc: { [key: string]: { message: string; attribute: string } } = {
     'badInput': { message: 'valeur incorrecte', attribute: '' },
     'valueMissing': { message: 'obligatoire', attribute: '' },
     'patternMismatch': { message: 'format non respecté (patron=?)', attribute: 'pattern' },
-    'tooLong': { message: 'trop long (max=?)',  attribute: 'maxlength' },
+    'tooLong': { message: 'trop long (max=?)', attribute: 'maxlength' },
     'tooShort': { message: 'trop court (min=?)', attribute: 'minlength' },
     'rangeOverflow': { message: 'trop grand (max= ?)', attribute: 'max' },
-    'rangeUnderflow': { message: 'trop petit (min=?)',  attribute: 'min' },
+    'rangeUnderflow': { message: 'trop petit (min=?)', attribute: 'min' },
     'stepMismatch': { message: 'erreur de pas (pas=?)', attribute: 'step' },
     'customError': { message: 'erreur spécialisé', attribute: '' },
     'typeMismatch': { message: 'syntaxe incorrecte', attribute: '' },
@@ -22,8 +22,8 @@ function message(field: MBFormField) {
     const input = field.input
     if (field.valid || !input) return ''
     const errorkey = Object.keys(valdesc).find(key => (input.validity as any)[key])
-    if (!errorkey)  return ''
-    return valdesc[errorkey].attribute ? valdesc[errorkey].message.replace(/\?/,input.getAttribute(valdesc[errorkey].attribute) ?? '') : valdesc[errorkey].message
+    if (!errorkey) return ''
+    return valdesc[errorkey].attribute ? valdesc[errorkey].message.replace(/\?/, input.getAttribute(valdesc[errorkey].attribute) ?? '') : valdesc[errorkey].message
 }
 
 /**
@@ -97,26 +97,26 @@ export abstract class MBFormField extends LitElement {
         }
 
         switch (schema.field) {
-            case 'mb-form-enum': return html`<mb-form-enum .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-enum>`
-            case 'mb-form-nstate': return html`<mb-form-nstate .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-nstate>`
-            case "mb-form-date": return html`<mb-form-date .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-date>`
-            case "mb-form-time": return html`<mb-form-time .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-time>`
-            case "mb-form-datetime": return html`<mb-form-datetime .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-datetime>`
-            case "mb-form-textarea": return html`<mb-form-textarea .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-textarea>`
-            case "mb-form-string": return html`<mb-form-string .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-string>`
-            case "mb-form-boolean": return html`<mb-form-boolean .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-boolean>`
-            case "mb-form-number": return html`<mb-form-number .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-number>`
-            case "mb-form-integer": return html`<mb-form-integer .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-integer>`
-            case "mb-form-range": return html`<mb-form-range .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-range>`
-            case "mb-form-array": return html`<mb-form-array .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-array>`
-            case "mb-form-object": return html` <mb-form-object .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.name]}" ?required="${required}"></mb-form-object>`
+            case 'mb-form-enum': return html`<mb-form-enum .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-enum>`
+            case 'mb-form-nstate': return html`<mb-form-nstate .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-nstate>`
+            case "mb-form-date": return html`<mb-form-date .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-date>`
+            case "mb-form-time": return html`<mb-form-time .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-time>`
+            case "mb-form-datetime": return html`<mb-form-datetime .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-datetime>`
+            case "mb-form-textarea": return html`<mb-form-textarea .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-textarea>`
+            case "mb-form-string": return html`<mb-form-string .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-string>`
+            case "mb-form-boolean": return html`<mb-form-boolean .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-boolean>`
+            case "mb-form-number": return html`<mb-form-number .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-number>`
+            case "mb-form-integer": return html`<mb-form-integer .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-integer>`
+            case "mb-form-range": return html`<mb-form-range .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-range>`
+            case "mb-form-array": return html`<mb-form-array .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-array>`
+            case "mb-form-object": return html` <mb-form-object .schema="${schema}" .name="${name}" .index="${index}" .data="${this.data[this.isItem ? this.index : this.name]}" ?required="${required}"></mb-form-object>`
             case 'mb-form-error':
             default: return html`<div class="alert alert-warning" role="alert">field name=${name} type ${schema.type}/${schema.field}  not implemented !</div>`
         }
     }
     renderMandatory(name: string): TemplateResult {
         return html`
-            ${name !== undefined ? html`*` : html`` }
+            ${name !== undefined ? html`*` : html``}
         `
     }
     arrayAppend(index?: number): TemplateResult {
@@ -147,11 +147,28 @@ export abstract class MBFormField extends LitElement {
         super.update(changedProperties)
     }
 
+    abstract(schema: Pojo, value: any): string {
+        switch (true) {
+            case value === null || value === undefined: return 'null'
+            case Array.isArray(value):
+                return (value as Array<any>)
+                    .filter((v: any) => v)
+                    .map((v: any) => this.abstract(schema.items, v))
+                    .join(', ')
+            case typeof value === 'object':
+                return Object.keys(schema.properties)
+                    .filter((property: string) => value[property])
+                    .map((property: string) => this.abstract(schema.properties[property],value[property]))
+                    .join(', ')
+            default: return value
+        }
+    }
+
     get label() {
         return this.isItem ? this.index : this.schema.title ?? this.schema.description ?? this.name
     }
     get renderLabel() {
-        return html`${this.isItem ? html`<span class="badge bg-primary rounded-pill">${this.label}</span>` : html`${this.label}${this.required ? '*' : ''}` }`
+        return html`${this.isItem ? html`<span class="badge bg-primary rounded-pill">${this.label}</span>` : html`${this.label}${this.required ? '*' : ''}`}`
     }
     get isItem() {
         return Array.isArray(this.data)
@@ -162,7 +179,9 @@ export abstract class MBFormField extends LitElement {
     get input() {
         return (this.shadowRoot?.getElementById('input') as HTMLInputElement)
     }
-
+    focus() {
+        this.input?.focus();
+    }
     isRequired(name: string, schema = this.schema) {
         return !!schema.required?.includes(name)
     }
@@ -175,7 +194,10 @@ export abstract class MBFormField extends LitElement {
                 return null
             case schema.type === 'object':
                 return Object.keys(schema.properties).reduce(
-                    (obj, property) => obj[property] = this.default(schema.properties[property], this.isRequired(property, schema))
+                    (obj, property) => {
+                        obj[property] = this.default(schema.properties[property], this.isRequired(property, schema))
+                        return obj
+                    }
                     , {} as Pojo)
             case schema.type === 'array' && schema.minItems:
                 return Array.from(Array(schema.minItems).keys()).map(this.default(schema.items, true))
@@ -212,7 +234,7 @@ export abstract class MBFormField extends LitElement {
     abstract getValue(): any
 
     get plainValue() {
-        if(!this.data) return null
+        if (!this.data) return null
         if (Array.isArray(this.data)) {
             return this.data[this.index]
         } else {

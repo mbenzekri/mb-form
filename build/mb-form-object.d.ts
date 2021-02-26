@@ -11,6 +11,7 @@ export declare class MBFormObject extends MBFormField {
     constructor();
     static get styles(): import("lit-element").CSSResult[];
     renderField(): TemplateResult;
+    focusout(evt: Event): void;
     toggle(): void;
     checkValidity(): boolean;
     getValue(): any;

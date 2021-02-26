@@ -26,32 +26,37 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-sm-8"> <mb-form style="width: 100%;" id="form"></mb-form> </div>
-            <div class="col-sm-4"> <div id="log"></div> </div>
+            <div class="col-sm-8">
+                <mb-form style="width: 100%;" id="form"></mb-form>
+            </div>
+            <div class="col-sm-4">
+                <div id="log"></div>
+            </div>
         </div>
     </div>
 </body>
 <script>
     const schema = {
-        "definitions" : {
-            "adresse" :  {
+        "definitions": {
+            "adresse": {
                 "type": "object",
-                "properties" : {
-                    "numero" : {"type": "integer"},
-                    "rep" : {"type": "string", title: "répétition", "enum":['','bis','ter','quater',"quinquies","sexies","septies","octies","nonies","decies"]},
-                    "voie" : {"type": "string"},
-                    "complement" : {"type": "string"},
-                    "commune" : {"type": "string"},
-                    "codepost" : {"type": "string", pattern:'[0-9]{5}'},
+                "properties": {
+                    "type": { "type": "string", "enum": ["domicile", "travail", "secondaire", "autre"] },
+                    "numero": { "type": "integer" },
+                    "rep": { "type": "string", title: "répétition", "enum": ['', 'bis', 'ter', 'quater', "quinquies", "sexies", "septies", "octies", "nonies", "decies"] },
+                    "voie": { "type": "string" },
+                    "complement": { "type": "string" },
+                    "commune": { "type": "string" },
+                    "codepost": { "type": "string", pattern: '[0-9]{5}' },
                 },
-                "required": ["numero","voie","codepost","commune"]
+                "required": ["numero", "voie", "codepost", "commune"]
             },
-            "fuzzy" : {
+            "fuzzy": {
                 "type": "boolean",
-                "oneOf" : [
-                    {"const": true, "title": "oui"},
-                    {"const": false, "title": "non"},
-                    {"const": null, "title": "inconnu"},
+                "oneOf": [
+                    { "const": true, "title": "oui" },
+                    { "const": false, "title": "non" },
+                    { "const": null, "title": "inconnu" },
                 ]
             }
         },
@@ -67,10 +72,10 @@
                 "maxLength": 10,
                 "pattern": "^[a-zA-Z ]*$"
             },
-            "password": { "type": "string", "format" : "password", "title": "password string", },
-            "color": { "type": "string", "format" : "color", "title":"color", "default" :"#FF0000", },
-            "email": { "type": "string", "format" : "email", "title": "email string", },
-            "url": { "type": "string", "format" : "uri", "title": "url string", },
+            "password": { "type": "string", "format": "password", "title": "password string", },
+            "color": { "type": "string", "format": "color", "title": "color", "default": "#FF0000", },
+            "email": { "type": "string", "format": "email", "title": "email string", },
+            "url": { "type": "string", "format": "uri", "title": "url string", },
             "boolean": { "type": "boolean", "title": "input boolean", },
             "integer": {
                 "type": "integer",
@@ -95,29 +100,36 @@
             "date": { "type": "string", "format": "date", "title": "input date", },
             "time": { "type": "string", "format": "time", "title": "input time", },
             "datetime": { "type": "string", "format": "date-time", "title": "input datetime", },
-            "fuzzy": { "$ref" : "#/definitions/fuzzy" },
-            "enum": { "type": "string", "title": "input enum", "enum": ["a","b","c","d","e"] },
+            "fuzzy": { "$ref": "#/definitions/fuzzy" },
+            "enum": { "type": "string", "title": "input enum", "enum": ["a", "b", "c", "d", "e"] },
             "enum2": {
                 "type": "integer",
                 "title": "input enum 2",
-                "oneOf" : [
-                    { "const" : 1, "title" : "Priorité Haute"},
-                    { "const" : 2, "title" : "Priorité Moyenne"},
-                    { "const" : 3, "title" : "Priorité Basse"},
-                    { "const" : 4, "title" : "Priorité nulle"},
+                "oneOf": [
+                    { "const": 1, "title": "Priorité Haute" },
+                    { "const": 2, "title": "Priorité Moyenne" },
+                    { "const": 3, "title": "Priorité Basse" },
+                    { "const": 4, "title": "Priorité nulle" },
                 ]
             },
             "arrayint": {
                 "type": "array",
                 "title": "array of integers",
-                "items" : { "type" : "integer", "default" : 5, "minimum":0},
+                "items": { "type": "integer", "default": 5, "minimum": 0 },
                 "minItems": 3,
                 "maxItems": 5
             },
-            "maison" : { "$ref": "#/definitions/adresse" },
+            "arrayadr": {
+                "type": "array",
+                "title": "array of adresse",
+                "items": { "$ref": "#/definitions/adresse" },
+                "minItems": 1,
+                "maxItems": 3
+            },
+            "maison": { "$ref": "#/definitions/adresse" },
             "error": { "type": "zztype", "title": "input error", }
         },
-        required: [ "string",
+        required: ["string",
             "password",
             "integer",
             "number",
@@ -129,24 +141,27 @@
             "error"
         ]
     }
- 
+
     const data = {
         "notmandatory": 'a string',
         "string": 'a',
         "boolean": true,
         "password": 'dontsayit',
-        "color" : "#0000FF",
+        "color": "#0000FF",
         "integer": 5,
         "range": 1,
         "number": 2.71828,
         "date": new Date(),
         "time": '13:15',
         "datetime": new Date(),
-        "enum": null,
+        "enum": "b",
         "enum2": null,
         "arrayint": [10, 20, 30],
-        "maison" : {},
-        "error" : 12
+        "arrayadr": [
+            { numero: 12, voie: "rue chapon", commune: "Paris", codepost: "75003" }
+        ],
+        "maison": { type: "travail", numero: 10, voie: "rue Amiral Mouchez", commune: "Paris", codepost: "75014" },
+        "error": 12
     }
     window.addEventListener('load', () => {
         const field = document.getElementById('form')

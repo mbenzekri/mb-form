@@ -8,6 +8,7 @@ import { MBFormField } from "./mb-form-field";
 export declare class MBFormEnum extends MBFormField {
     constructor();
     renderField(): import("lit-element").TemplateResult;
+    isSelected(value: any): boolean;
     getValue(): any;
     setValue(val: any): void;
     get enum(): {

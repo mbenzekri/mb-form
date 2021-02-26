@@ -27,11 +27,13 @@ export declare abstract class MBFormField extends LitElement {
     connectedCallback(): void;
     firstUpdated(_changedProperties: any): void;
     update(changedProperties: Map<string, any>): void;
+    abstract(schema: Pojo, value: any): string;
     get label(): any;
     get renderLabel(): TemplateResult;
     get isItem(): boolean;
     get isProperty(): boolean;
     get input(): HTMLInputElement;
+    focus(): void;
     isRequired(name: string, schema?: Pojo): boolean;
     default(schema: Pojo, required: boolean): any;
     change(): void;

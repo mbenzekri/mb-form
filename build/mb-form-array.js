@@ -44,7 +44,7 @@ let MBFormArray = class MBFormArray extends MBFormField {
                     <label for="input" class="col-sm-3 col-form-label">${this.renderLabel}</label>
                     <div class="col-sm-9"> 
                         <ul ?hidden="${this.collapsed}" class="list-group" >
-                            ${this.data[this.name].map((item, i) => html `
+                            ${this.data[this.name].map((_item, i) => html `
                                 ${(this.current !== i)
             ? html `<li 
                                                 id="${i}"
@@ -56,17 +56,17 @@ let MBFormArray = class MBFormArray extends MBFormField {
                                                 class="list-group-item"
                                             >
                                             <span class="badge bg-primary rounded-pill">${i}</span>
-                                            ${item}
+                                            ${this.abstract(this.schema.items, this.value[i])}
                                             <button @click="${() => this.del(i)}" type="button" style="float:right" class="btn-close" aria-label="Close"></button>
                                         </li>`
             : html ``}
                                 ${(this.current === i)
             ? html `<li @focusout="${this.blur}" class="list-group-item">
-                                            ${this.renderItem(this.current)}
+                                            ${this.renderItem(i)}
                                         </li>`
             : html ``}
                             `)}
-                            <li class="list-group-item"><button type="button" @click="${this.add}" ?disabled="${this.nomore}" class="btn btn-primary btn-sm ">Ajouter</button></li>
+                            <li class="list-group-item"  @click="${this.blur}" ><button type="button" @click="${this.add}" ?disabled="${this.nomore}" class="btn btn-primary btn-sm ">Ajouter</button></li>
                         </ul>
                     </div>
                 </div>
@@ -110,6 +110,7 @@ let MBFormArray = class MBFormArray extends MBFormField {
     }
     edit(index) {
         this.current = index;
+        this.focus();
         this.requestUpdate();
     }
     add() {

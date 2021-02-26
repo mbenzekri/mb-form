@@ -29,11 +29,15 @@ let MBFormEnum = class MBFormEnum extends MBFormField {
                         @input="${this.change}" 
                         ?required="${this.required}"
                     >
-                        ${this.enum.map(item => html `<option .value="${item.value}">${item.label}</option>`)}
+                        ${this.required ? html `<option ?selected="${this.isSelected(null)}" .value="${''}"></option>` : html ``}
+                        ${this.enum.map(item => html `<option ?selected="${this.isSelected(item.value)}" .value="${item.value}">${item.label}</option>`)}
                     </select>
                 </div>
             </div>
         `;
+    }
+    isSelected(value) {
+        return this.value === value;
     }
     getValue() { return this.plainValue; }
     setValue(val) {

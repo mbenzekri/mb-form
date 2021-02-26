@@ -33,11 +33,18 @@ export class MBFormObject extends MBFormField {
             Object.keys(this.schema.properties).forEach(name => {
                 itemTemplates.push(this.renderItem(name));
             })
-        return html`
-                <div class="panel">
-                    <h5 style="text-align:center" @click="${this.toggle}">${this.label}</h5>
-                    <div ?hidden="${this.collapsed}" ><hr> ${itemTemplates}</div>
-                </div>`
+        return html`${ this.isItem 
+                ? html`<div @click="${this.focusout}">${this.renderLabel}</div>${itemTemplates}` 
+                : html`<div class="panel">
+                        <label class="col-sm-3 col-form-label" @click="${this.toggle}" >${this.renderLabel}</label>
+                        <hr ?hidden="${this.collapsed}" style="margin: 0 0" >
+                        <div ?hidden="${this.collapsed}" > ${itemTemplates} </div>
+                    </div>`}`
+    }
+
+    focusout(evt: Event) {
+        const event = new Event('focusout',{bubbles: true, composed: true});
+        evt.target?.dispatchEvent(event); 
     }
 
     toggle() {
