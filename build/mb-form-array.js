@@ -19,64 +19,70 @@ let MBFormArray = class MBFormArray extends MBFormField {
         this.collapsed = false;
         this.current = null;
     }
+    get nomore() {
+        return this.schema.maxItems && this.value && this.value.length >= this.schema.maxItems;
+    }
+    get noless() {
+        return this.schema.minItems && this.value && this.value.length <= this.schema.minItems;
+    }
+    getValue() { return this.plainValue; }
+    setValue(val) {
+        this.data[Array.isArray(this.data) ? this.index : this.name] = Array.isArray(val) ? val : undefined;
+    }
     static get styles() {
         return [
-            css `
-                .panel {
+            css `.panel {
                     padding:5px;
                     border: solid 1px lightgray;
                     border-radius:10px; 
                     user-select: none;
-                }
-                `
+                }`
         ];
     }
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener('remove-item', this.handleRemove);
+        this.addEventListener('remove-item', (evt) => { this.del(evt.detail.index); });
     }
     renderField() {
         if (!this.data)
             return html `<div class="form-group row"></div>`;
+        const lines = this.data[this.name].map((_i, i) => html `${(this.current === i) ? this.renderEditable(i) : this.renderStatic(i)}`);
         return html `
-            <div  @focusout="${this.blur}" >
+            <div  @focusout="${this.focusout}" >
                 <div class="form-group row">
                     <label for="input" class="col-sm-3 col-form-label">${this.renderLabel}</label>
-                    <div class="col-sm-9"> 
+                    <div class="col-sm"> 
                         <ul ?hidden="${this.collapsed}" class="list-group" >
-                            ${this.data[this.name].map((_item, i) => html `
-                                ${(this.current !== i)
-            ? html `<li 
-                                                id="${i}"
-                                                draggable="true" 
-                                                @dragstart="${(ev) => this.drag(ev, i)}"
-                                                @dragover="${this.allowDrop}"
-                                                @drop="${this.drop}"
-                                                @click="${() => this.edit(i)}" 
-                                                class="list-group-item"
-                                            >
-                                            <span class="badge bg-primary rounded-pill">${i}</span>
-                                            ${this.abstract(this.schema.items, this.value[i])}
-                                            <button @click="${() => this.del(i)}" type="button" style="float:right" class="btn-close" aria-label="Close"></button>
-                                        </li>`
-            : html ``}
-                                ${(this.current === i)
-            ? html `<li @focusout="${this.blur}" class="list-group-item">
-                                            ${this.renderItem(i)}
-                                        </li>`
-            : html ``}
-                            `)}
-                            <li class="list-group-item"  @click="${this.blur}" ><button type="button" @click="${this.add}" ?disabled="${this.nomore}" class="btn btn-primary btn-sm ">Ajouter</button></li>
+                            ${lines}
+                            <li class="list-group-item"  @click="${this.focusout}" ><button type="button" @click="${this.add}" ?disabled="${this.nomore}" class="btn btn-primary btn-sm ">Ajouter</button></li>
                         </ul>
                     </div>
                 </div>
             </div>`;
     }
-    handleRemove(event) {
-        const index = event.detail.index;
-        this.del(index);
-        event.preventDefault();
-        event.stopImmediatePropagation();
+    renderStatic(index) {
+        return html `
+        <li 
+                id="${index}"
+                draggable="true" 
+                @dragstart="${(ev) => this.drag(ev, index)}"
+                @dragover="${this.allowDrop}"
+                @drop="${this.drop}"
+                @click="${() => this.edit(index)}" 
+                class="list-group-item"
+            >
+            <span class="badge bg-primary rounded-pill">${index}</span>
+            ${this.abstract(this.schema.items, this.value[index])}
+            <button ?hidden="${this.noless}" @click="${(evt) => this.del(index, evt)}" type="button" style="float:right" class="btn-close" aria-label="Close"></button>
+        </li>`;
+    }
+    renderEditable(index) {
+        return html `<li @focusout="${this.focusout}" class="list-group-item"> ${this.renderItem(index)} </li>`;
+    }
+    focusout(evt) {
+        this.current = null;
+        evt.preventDefault();
+        evt.stopPropagation();
     }
     drag(ev, index) {
         if (ev.dataTransfer) {
@@ -100,12 +106,15 @@ let MBFormArray = class MBFormArray extends MBFormField {
     allowDrop(ev) {
         ev.preventDefault();
     }
-    blur() {
-        this.current = null;
-    }
-    del(index) {
+    del(index, evt) {
+        if (this.noless)
+            return;
         this.value.splice(index, 1);
         this.current = null;
+        if (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+        }
         this.requestUpdate();
     }
     edit(index) {
@@ -114,20 +123,12 @@ let MBFormArray = class MBFormArray extends MBFormField {
         this.requestUpdate();
     }
     add() {
-        this.current = this.value.length;
+        if (this.nomore)
+            return;
         this.value.push(this.default(this.schema.items, true));
-        this.requestUpdate();
+        this.edit(this.value.length - 1);
     }
-    get nomore() {
-        return this.schema.maxItems && this.value && this.value.length >= this.schema.maxItems;
-    }
-    toggle() {
-        this.collapsed = !this.collapsed;
-    }
-    getValue() { return this.plainValue; }
-    setValue(val) {
-        this.data[Array.isArray(this.data) ? this.index : this.name] = Array.isArray(val) ? val : undefined;
-    }
+    toggle() { this.collapsed = !this.collapsed; }
 };
 __decorate([
     property({ attribute: false })

@@ -42,9 +42,9 @@
                 "type" : "object",
                 "properties" : {
                     "firstname": { "type": "string"},
-                    "gender": { "type": "string", "enum": ["male", "female", "gay", "lesbian", "transgender","other"] },
                     "lastname": { "type": "string"},
                     "surname": { "type": "string"},
+                    "gender": { "type": "string", "enum": ["male", "female", "gay", "lesbian", "transgender","other"] },
                     "birthday": { "type": "string", "format" : "date"},
                     "group" : { "$ref": "#/definitions/group"},
                     "enterprise": { "type": "string"},

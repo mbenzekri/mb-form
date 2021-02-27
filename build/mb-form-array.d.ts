@@ -8,21 +8,23 @@ import { MBFormField } from "./mb-form-field";
 export declare class MBFormArray extends MBFormField {
     collapsed: boolean;
     current: number | null;
+    get nomore(): boolean;
+    get noless(): boolean;
     constructor();
+    getValue(): any;
+    setValue(val: any): void;
     static get styles(): import("lit-element").CSSResult[];
     connectedCallback(): void;
     renderField(): import("lit-element").TemplateResult;
-    handleRemove(event: CustomEvent): void;
+    private renderStatic;
+    private renderEditable;
+    focusout(evt: Event): void;
     drag(ev: DragEvent, index: number): void;
     drop(ev: DragEvent): void;
     allowDrop(ev: DragEvent): void;
-    blur(): void;
-    del(index: number): void;
+    del(index: number, evt?: Event): void;
     edit(index: number): void;
     add(): void;
-    get nomore(): boolean;
     toggle(): void;
-    getValue(): any;
-    setValue(val: any): void;
 }
 //# sourceMappingURL=mb-form-array.d.ts.map
