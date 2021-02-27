@@ -13,7 +13,7 @@ export declare class MBFormString extends MBFormField {
     get minlength(): any;
     get maxlength(): any;
     get pattern(): any;
-    get type(): "text" | "color" | "email" | "password" | "url";
+    get type(): "color" | "email" | "password" | "url" | "text";
     getValue(): any;
     setValue(val: any): void;
 }

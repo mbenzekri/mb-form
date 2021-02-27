@@ -121,7 +121,7 @@ export class MBFormArray extends MBFormField {
     }
     add() {
         if (this.nomore) return
-        this.value.push(this.default(this.schema.items, true))
+        this.value.push(this.default(this.schema.items))
         this.edit(this.value.length-1)
     }
     toggle() { this.collapsed = !this.collapsed }

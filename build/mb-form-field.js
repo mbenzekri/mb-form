@@ -192,19 +192,19 @@ export class MBFormField extends LitElement {
         var _a;
         return !!((_a = schema.required) === null || _a === void 0 ? void 0 : _a.includes(name));
     }
-    default(schema, required) {
+    default(schema) {
         switch (true) {
-            case isbasic(schema.type) && required && 'default' in schema:
+            case isbasic(schema.type) && 'default' in schema:
                 return schema.default;
             case isbasic(schema.type):
                 return null;
             case schema.type === 'object':
                 return Object.keys(schema.properties).reduce((obj, property) => {
-                    obj[property] = this.default(schema.properties[property], this.isRequired(property, schema));
+                    obj[property] = this.default(schema.properties[property]);
                     return obj;
                 }, {});
             case schema.type === 'array' && schema.minItems:
-                return Array.from(Array(schema.minItems).keys()).map(this.default(schema.items, true));
+                return Array.from(Array(schema.minItems).keys()).map(this.default(schema.items));
             case schema.type === 'array':
                 return [];
             default: return null;

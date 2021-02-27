@@ -50,7 +50,7 @@ export declare abstract class MBFormField extends LitElement {
     get input(): HTMLInputElement;
     focus(): void;
     isRequired(name: string, schema?: Pojo): boolean;
-    default(schema: Pojo, required: boolean): any;
+    default(schema: Pojo): any;
     change(): void;
     dropItem(): void;
     get value(): any;
