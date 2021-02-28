@@ -32,10 +32,33 @@ let MBFormObject = class MBFormObject extends MBFormField {
     }
     renderField() {
         const itemTemplates = [];
-        if (this.schema.properties)
-            Object.keys(this.schema.properties).forEach(name => {
-                itemTemplates.push(this.renderItem(name));
+        const properties = this.schema.properties;
+        // render properties with grouping
+        if (properties) {
+            const grouping = Object.entries(properties)
+                .map(([propname, schema]) => ({ propname, group: schema.group ? schema.group : `__` }));
+            let current = '';
+            let group = [];
+            grouping.forEach(item => {
+                if (item.group === current) {
+                    group.push(this.renderItem(item.propname));
+                }
+                else {
+                    if (group.length) {
+                        itemTemplates.push(html `<div class="panel"><div style="text-align:center;font-weight: bold;">${current}</div>${group}</div>`);
+                        group = [];
+                        current = '';
+                    }
+                    if (item.group === '__') {
+                        itemTemplates.push(this.renderItem(item.propname));
+                    }
+                    else {
+                        current = item.group;
+                        group.push(this.renderItem(item.propname));
+                    }
+                }
             });
+        }
         return html `${this.isItem
             ? html `<div @click="${this.focusout}">${this.renderLabel}</div>${itemTemplates}`
             : html `<div class="panel">

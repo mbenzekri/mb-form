@@ -1,7 +1,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { customElement, html,css , property, TemplateResult } from "lit-element";
-import { MBFormField } from "./mb-form-field";
+import { MBFormField, Pojo } from "./mb-form-field";
 
 /**
  * @prop schema
@@ -29,10 +29,31 @@ export class MBFormObject extends MBFormField {
     }
     renderField() {
         const itemTemplates: TemplateResult[] = [];
-        if (this.schema.properties) 
-            Object.keys(this.schema.properties).forEach(name => {
-                itemTemplates.push(this.renderItem(name));
+        const properties = this.schema.properties
+        // render properties with grouping
+        if (properties) {
+            const grouping = Object.entries(properties as Pojo)
+                .map(([propname, schema]) => ({propname, group: schema.group ? schema.group : `__`}))
+            let current = ''
+            let group: TemplateResult[] = [];
+            grouping.forEach(item => {
+                if (item.group === current) {
+                    group.push(this.renderItem(item.propname))
+                } else {
+                    if (group.length) {
+                        itemTemplates.push(html`<div class="panel"><div style="text-align:center;font-weight: bold;">${current}</div>${group}</div>`)
+                        group = []
+                        current = ''
+                    }
+                    if (item.group === '__') {
+                        itemTemplates.push(this.renderItem(item.propname))
+                    } else {
+                        current = item.group
+                        group.push(this.renderItem(item.propname))
+                    }
+                }
             })
+        }
         return html`${ this.isItem 
                 ? html`<div @click="${this.focusout}">${this.renderLabel}</div>${itemTemplates}` 
                 : html`<div class="panel">
