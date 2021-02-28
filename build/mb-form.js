@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import { html, LitElement, property, customElement } from "lit-element";
 import { isbasic } from "./mb-form-field";
 import "./mb-form-object";
+const addedprops = ["group", "tab", "abstract", "readonly", "hidden"];
 /**
  * @prop schema
  * @prop data
@@ -69,7 +70,13 @@ let MBForm = class MBForm extends LitElement {
          */
         const solveref = (schema) => {
             const properties = schema.properties;
-            properties && Object.entries(properties).forEach(([propname, propschema]) => propschema.$ref && (properties[propname] = this.definition(propschema.$ref)));
+            properties && Object.entries(properties).forEach(([propname, propschema]) => {
+                if (propschema.$ref) {
+                    const previous = propschema;
+                    properties[propname] = this.definition(propschema.$ref);
+                    Object.entries(previous).forEach(([name, value]) => addedprops.includes(name) && (properties[propname][name] = value));
+                }
+            });
             schema.items && schema.items.$ref && (schema.items = this.definition(schema.items.$ref));
         };
         /**
@@ -139,8 +146,10 @@ let MBForm = class MBForm extends LitElement {
         if (!ref.startsWith("#/definitions/"))
             throw Error(`Solving refs: only '#/definitions/defname' allowed [found => ${ref}]`);
         const defname = ref.split("/")[2];
-        const def = this._schema.definitions[defname];
-        return def;
+        const deforig = this._schema.definitions[defname];
+        const defcopy = {};
+        Object.keys(deforig).forEach((name) => defcopy[name] = deforig[name]);
+        return defcopy;
     }
 };
 __decorate([

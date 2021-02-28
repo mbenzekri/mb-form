@@ -36,26 +36,46 @@ let MBFormObject = class MBFormObject extends MBFormField {
         // render properties with grouping
         if (properties) {
             const grouping = Object.entries(properties)
-                .map(([propname, schema]) => ({ propname, group: schema.group ? schema.group : `__` }));
+                .map(([propname, schema]) => { var _a; return ({ propname, group: (_a = schema.tab) !== null && _a !== void 0 ? _a : schema.group, istab: !!schema.tab }); });
             let current = '';
+            let istab = false;
             let group = [];
-            grouping.forEach(item => {
+            let labels = [];
+            grouping.forEach((item, i) => {
                 if (item.group === current) {
+                    // collecting group rendering
                     group.push(this.renderItem(item.propname));
+                    labels.push(html `${item.propname}`);
                 }
-                else {
-                    if (group.length) {
-                        itemTemplates.push(html `<div class="panel"><div style="text-align:center;font-weight: bold;">${current}</div>${group}</div>`);
-                        group = [];
-                        current = '';
-                    }
-                    if (item.group === '__') {
-                        itemTemplates.push(this.renderItem(item.propname));
+                if ((item.group !== current || (i + 1) === grouping.length) && group.length) {
+                    // push the groups on rendering list
+                    if (istab) {
+                        // render tab group (Actually render tabs as fields)
+                        itemTemplates.push(...group);
+                        // itemTemplates.push(html`
+                        //     <div class="panel">
+                        //         <div style="text-align:center;font-weight:bold;">${current}</div>
+                        //         ${group}
+                        //     </div>`)
                     }
                     else {
-                        current = item.group;
-                        group.push(this.renderItem(item.propname));
+                        // render simple group
+                        itemTemplates.push(html `
+                            <div class="panel">
+                                <div style="text-align:center;font-weight:bold;">${current}</div>
+                                ${group}
+                            </div>`);
                     }
+                }
+                if (!item.group) {
+                    // render single item
+                    itemTemplates.push(this.renderItem(item.propname));
+                }
+                if (item.group && item.group !== current) {
+                    current = item.group;
+                    istab = item.istab;
+                    group = [this.renderItem(item.propname)];
+                    labels = [html `${item.propname}`];
                 }
             });
         }

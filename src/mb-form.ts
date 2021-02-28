@@ -3,6 +3,9 @@ import { html, LitElement, property, customElement } from "lit-element";
 export type Pojo = { [key: string]: any }
 import { isbasic } from "./mb-form-field";
 import "./mb-form-object";
+
+const addedprops = ["group","tab", "abstract","readonly","hidden"]
+
 /**
  * @prop schema
  * @prop data
@@ -73,8 +76,15 @@ export class MBForm extends LitElement {
         const solveref = (schema: Pojo) => {
             const properties: { [key: string]: any } = schema.properties
             properties && Object.entries(properties).forEach(
-                ([propname, propschema]) => propschema.$ref && (properties[propname] = this.definition(propschema.$ref))
-            )
+                ([propname, propschema]) => {
+                    if (propschema.$ref) {
+                        const previous = propschema
+                        properties[propname] = this.definition(propschema.$ref)
+                        Object.entries(previous).forEach(
+                            ([name,value]) => addedprops.includes(name) && (properties[propname][name]=value)
+                        )
+                    }
+                })
             schema.items && schema.items.$ref && (schema.items = this.definition(schema.items.$ref))
         }
         /**
@@ -148,8 +158,10 @@ export class MBForm extends LitElement {
     definition(ref: string) {
         if (!ref.startsWith("#/definitions/")) throw Error(`Solving refs: only '#/definitions/defname' allowed [found => ${ref}]`)
         const defname = ref.split("/")[2];
-        const def = this._schema.definitions[defname];
-        return def
+        const deforig: Pojo = this._schema.definitions[defname]
+        const defcopy: Pojo = {}
+        Object.keys(deforig).forEach((name) => defcopy[name] = deforig[name]);
+        return defcopy
     }
 
 }

@@ -54,6 +54,7 @@
             },
             "fuzzy": {
                 "type": "boolean",
+                "title":  "Boolean enum",
                 "oneOf": [
                     { "const": true, "title": "oui" },
                     { "const": false, "title": "non" },
@@ -79,7 +80,8 @@
             "color": { "type": "string", "format": "color", "title": "color", "default": "#FF0000", "group" : "Chaine" },
             "email": { "type": "string", "format": "email", "title": "email string", "group" : "Chaine" },
             "url": { "type": "string", "format": "uri", "title": "url string", "group" : "Chaine" },
-            "boolean": { "type": "boolean", "title": "input boolean", },
+            "fuzzy": { "$ref": "#/definitions/fuzzy" , "group" : "Booléen"},
+            "boolean": { "type": "boolean", "title": "Boolean checkbox" , "group" : "Booléen" },
             "integer": {
                 "type": "integer",
                 "title": "input integer",
@@ -107,8 +109,8 @@
             "time": { "type": "string", "format": "time", "title": "input time", "group" : "Date/Heure" },
             "datetime": { "type": "string", "format": "date-time", "title": "input datetime", "group" : "Date/Heure" },
 
-            "fuzzy": { "$ref": "#/definitions/fuzzy" , "group" : "Enumeration"},
-            "enum": { "type": "string", "title": "input enum", "enum": ["a", "b", "c", "d", "e"] , "group" : "Enumeration"},
+            "enum0": { "type": "integer", "title": "enum integer", "enum": [1, 10, 1000, 10000, 100000] , "group" : "Enumeration"},
+            "enum1": { "type": "string", "title": "enum string", "enum": ["a", "b", "c", "d", "e"] , "group" : "Enumeration"},
             "enum2": {
                 "type": "integer",
                 "title": "input enum 2",
@@ -123,19 +125,21 @@
             },
             "arrayint": {
                 "type": "array",
-                "title": "array of integers",
+                "title": "Integer[]",
                 "items": { "type": "integer", "default": 5, "minimum": 0 },
                 "minItems": 2,
-                "maxItems": 5
+                "maxItems": 5,
+                "tab": "Last props"
             },
             "arrayadr": {
                 "type": "array",
-                "title": "array of adresse",
+                "title": "Adresse[]",
                 "items": { "$ref": "#/definitions/adresse" },
                 "minItems": 1,
-                "maxItems": 3
+                "maxItems": 3,
+                "tab": "Last props"
             },
-            "maison": { "$ref": "#/definitions/adresse" },
+            "maison": { "$ref": "#/definitions/adresse" , "tab": "Last props"},
         },
         required: ["string",
             "password",
@@ -156,13 +160,16 @@
         "boolean": true,
         "password": 'dontsayit',
         "color": "#0000FF",
+        "boolean": true,
+        "fuzzy": null,
         "integer": 5,
         "range": 1,
         "number": 2.71828,
         "date": new Date(),
         "time": '13:15',
         "datetime": new Date(),
-        "enum": "b",
+        "enum0": "b",
+        "enum1": "b",
         "enum2": null,
         "arrayint": [10, 20, 30],
         "arrayadr": [
