@@ -48,6 +48,46 @@ export abstract class MBFormField extends LitElement {
         this.data = { _dummy_: data }
         this.schema = schema
     }
+    abstract renderField(): TemplateResult
+    abstract setValue(value: any): void
+    abstract getValue(): any
+
+    get plainValue() {
+        if (!this.data) return null
+        if (Array.isArray(this.data)) {
+            return this.data[this.index]
+        } else {
+            if (!(this.name in this.data)) this.data[this.name] = null
+            return this.data[this.name]
+        }
+    }
+    get value(): any {
+        return this.getValue()
+    }
+    set value(val: any) {
+        this.check()
+        this.setValue(val)
+    }
+
+    /**
+     * return label for this field
+     */
+    get label() {
+        return this.isItem ? this.index : this.schema.title ?? this.schema.description ?? this.name
+    }
+    get isItem() {
+        return Array.isArray(this.data)
+    }
+    get isProperty() {
+        return !this.isItem
+    }
+    get input() {
+        return (this.shadowRoot?.getElementById('input') as HTMLInputElement)
+    }
+    focus() {
+        this.input?.focus();
+    }
+
     static get styles() {
         return [css`
             .invalid {
@@ -148,9 +188,7 @@ export abstract class MBFormField extends LitElement {
     }
 
     /**
-     * return an abstract for a given schmea,value pair 
-     * @param schema 
-     * @param value 
+     * return an abstract for a given schema,value pair 
      */
     abstract(schema: Pojo, value: any): string {
         switch (true) {
@@ -169,27 +207,6 @@ export abstract class MBFormField extends LitElement {
         }
     }
 
-    /**
-     * return label for this field
-     */
-    get label() {
-        return this.isItem ? this.index : this.schema.title ?? this.schema.description ?? this.name
-    }
-    get isItem() {
-        return Array.isArray(this.data)
-    }
-    get isProperty() {
-        return !this.isItem
-    }
-    get input() {
-        return (this.shadowRoot?.getElementById('input') as HTMLInputElement)
-    }
-    focus() {
-        this.input?.focus();
-    }
-    isRequired(name: string, schema = this.schema) {
-        return !!schema.required?.includes(name)
-    }
 
     default(schema: Pojo): any {
         switch (true) {
@@ -222,30 +239,13 @@ export abstract class MBFormField extends LitElement {
         const event = new CustomEvent('remove-item', { detail: this.index, composed: true })
         this.dispatchEvent(event)
     }
-    get value(): any {
-        return this.getValue()
-    }
-    set value(val: any) {
-        this.check()
-        this.setValue(val)
+    isRequired(name: string, schema = this.schema) {
+        return !!schema.required?.includes(name)
     }
     check() {
         this.valid = this.input?.checkValidity()
         this.message = message(this)
         this.input?.classList.add(this.valid ? 'valid' : 'invalid')
         this.input?.classList.remove(this.valid ? 'invalid' : 'valid')
-    }
-    abstract renderField(): TemplateResult
-    abstract setValue(value: any): void
-    abstract getValue(): any
-
-    get plainValue() {
-        if (!this.data) return null
-        if (Array.isArray(this.data)) {
-            return this.data[this.index]
-        } else {
-            if (!(this.name in this.data)) this.data[this.name] = null
-            return this.data[this.name]
-        }
     }
 }

@@ -43,9 +43,9 @@
                 "title" : "adresse",
                 "properties": {
                     "type": { "type": "string", "enum": ["domicile", "travail", "vacances", "facturation", "autre"] },
-                    "numero": { "type": "integer" },
-                    "rep": { "type": "string", title: "répétition", "enum": ['', 'bis', 'ter', 'quater', "quinquies", "sexies", "septies", "octies", "nonies", "decies"] },
-                    "voie": { "type": "string" },
+                    "numero": { "type": "integer" , "inline": 3, "title" : "no"},
+                    "rep": { "type": "string", "title": "rép.", "inline": 3, "enum": ['bis', 'ter', 'quater', "quinquies", "sexies", "septies", "octies", "nonies", "decies"] },
+                    "voie": { "type": "string", "inline": 6 },
                     "complement": { "type": "string" },
                     "commune": { "type": "string" },
                     "codepost": { "type": "string", pattern: '[0-9]{5}' },

@@ -51,6 +51,46 @@ export class MBFormField extends LitElement {
         this.data = { _dummy_: data };
         this.schema = schema;
     }
+    get plainValue() {
+        if (!this.data)
+            return null;
+        if (Array.isArray(this.data)) {
+            return this.data[this.index];
+        }
+        else {
+            if (!(this.name in this.data))
+                this.data[this.name] = null;
+            return this.data[this.name];
+        }
+    }
+    get value() {
+        return this.getValue();
+    }
+    set value(val) {
+        this.check();
+        this.setValue(val);
+    }
+    /**
+     * return label for this field
+     */
+    get label() {
+        var _a, _b;
+        return this.isItem ? this.index : (_b = (_a = this.schema.title) !== null && _a !== void 0 ? _a : this.schema.description) !== null && _b !== void 0 ? _b : this.name;
+    }
+    get isItem() {
+        return Array.isArray(this.data);
+    }
+    get isProperty() {
+        return !this.isItem;
+    }
+    get input() {
+        var _a;
+        return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.getElementById('input');
+    }
+    focus() {
+        var _a;
+        (_a = this.input) === null || _a === void 0 ? void 0 : _a.focus();
+    }
     static get styles() {
         return [css `
             .invalid {
@@ -147,9 +187,7 @@ export class MBFormField extends LitElement {
         this.check();
     }
     /**
-     * return an abstract for a given schmea,value pair
-     * @param schema
-     * @param value
+     * return an abstract for a given schema,value pair
      */
     abstract(schema, value) {
         switch (true) {
@@ -166,31 +204,6 @@ export class MBFormField extends LitElement {
                     .join(', ');
             default: return value;
         }
-    }
-    /**
-     * return label for this field
-     */
-    get label() {
-        var _a, _b;
-        return this.isItem ? this.index : (_b = (_a = this.schema.title) !== null && _a !== void 0 ? _a : this.schema.description) !== null && _b !== void 0 ? _b : this.name;
-    }
-    get isItem() {
-        return Array.isArray(this.data);
-    }
-    get isProperty() {
-        return !this.isItem;
-    }
-    get input() {
-        var _a;
-        return (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.getElementById('input');
-    }
-    focus() {
-        var _a;
-        (_a = this.input) === null || _a === void 0 ? void 0 : _a.focus();
-    }
-    isRequired(name, schema = this.schema) {
-        var _a;
-        return !!((_a = schema.required) === null || _a === void 0 ? void 0 : _a.includes(name));
     }
     default(schema) {
         switch (true) {
@@ -219,12 +232,9 @@ export class MBFormField extends LitElement {
         const event = new CustomEvent('remove-item', { detail: this.index, composed: true });
         this.dispatchEvent(event);
     }
-    get value() {
-        return this.getValue();
-    }
-    set value(val) {
-        this.check();
-        this.setValue(val);
+    isRequired(name, schema = this.schema) {
+        var _a;
+        return !!((_a = schema.required) === null || _a === void 0 ? void 0 : _a.includes(name));
     }
     check() {
         var _a, _b, _c;
@@ -232,18 +242,6 @@ export class MBFormField extends LitElement {
         this.message = message(this);
         (_b = this.input) === null || _b === void 0 ? void 0 : _b.classList.add(this.valid ? 'valid' : 'invalid');
         (_c = this.input) === null || _c === void 0 ? void 0 : _c.classList.remove(this.valid ? 'invalid' : 'valid');
-    }
-    get plainValue() {
-        if (!this.data)
-            return null;
-        if (Array.isArray(this.data)) {
-            return this.data[this.index];
-        }
-        else {
-            if (!(this.name in this.data))
-                this.data[this.name] = null;
-            return this.data[this.name];
-        }
     }
 }
 __decorate([

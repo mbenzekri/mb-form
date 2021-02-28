@@ -23,7 +23,7 @@ let MBFormEnum = class MBFormEnum extends MBFormField {
                 <label for="input" class="col-sm-3 col-form-label">${this.renderLabel}</label> 
                 <div class="col-sm-9">
                     <select 
-                        class="form-control" 
+                        class="form-select" 
                         id="input" 
                         .value="${this.value}" 
                         @input="${this.change}" 
